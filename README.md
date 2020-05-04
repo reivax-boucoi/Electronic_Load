@@ -30,7 +30,7 @@ Altough the device has not been fully qualified through systematic testing, here
 * Device current consumption : 50mA nominal (0.6W)
 * Load current range : 5mA - 5.25A, in 8mA steps
 * Current regulation : 5% +/- 8mA typical @ 8kHz bandwidth
-* Transient response : rise time < 1µs/A, overshoot < 2%
+* Transient response : rise time < 20µs/A, overshoot < 2%
 * Constant Power/Resistance regulation bandwidth : 10Hz
 
 ---
@@ -47,6 +47,7 @@ On the analog part, 10mΩ  and 0.2Ω shunt resistors are used, coupled with two 
 The layout was done using the Eagle software (v9.5.2). Gerbers, Eagle project files, top and bottom views are available on the `pcb` folder. PCBs were printed using JLCPCB service.
 The schematic is available in a pdf and Eagle `.sch` format.
 
+Several user-definable bi-color status LEDs are included, such as Load ON/OFF, TX & RX, acquisition blink, as well as a power LED.
 
 There are several issues regarding the layout of the PCB, as it is a first version. Improper Kelvin connections to the current sense resistors, or wrong hole size for the power input connector by example. The heatsink originally used is salvaged from old equipement and the footprint may not be relevant to anyone else. Space for rubber feet placement should be included. Also, the LCD is too close to the heatsink, which is impractical during assembly (especially accessing the fan and temp sensor connector).
 
@@ -81,4 +82,5 @@ An ISP port is provided on the board, making reflashing easy. All you need is an
 * Add current sweep programming for DC-DC converters automatic characterization (with di/dv auto resolution)
 * Fix the minimum current issue (currently min is 5mA)
 * Fix the 4 terminal Kelvin connection on the 10mΩ current sense resistors in the PCB layout
+* Design a usb isolator companion board or add SD card logging addon on i2c bus.
 * ...
