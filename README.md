@@ -4,7 +4,7 @@ For more information on what an electronic load does and what it can be used for
 
 Specifically, this load targets DC-DC converters testing, as it includes input and output power monitoring.
 
-I you have any question on this repository, feel free to contact the owner.
+I you have any question on this repository, feel free to contact the owner (xavier[dot]bourlot[at]gmail[dot]com).
 
 ---
 
