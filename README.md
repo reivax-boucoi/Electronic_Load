@@ -73,7 +73,8 @@ An ISP port is provided on the board, making reflashing easy. All you need is an
 
 ## Improvements
 
-* Mechanical mount for the fan / stabilize the board
+* Design a mechanical mount for the fan / stabilize the board
+* Re-think the menu system to be more modular / lower size
 * Add logging capability with serial interface
 * Add current sweep programming for DC-DC converters automatic characterization (with di/dv auto resolution)
 * Fix the minimum current issue (currently min is 5mA)
