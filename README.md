@@ -62,6 +62,9 @@ An ISP port is provided on the board, making reflashing easy. All you need is an
 
 ### Software structure
 
+
+### Usage
+
 ---
 
 ## Improvements
@@ -70,4 +73,4 @@ An ISP port is provided on the board, making reflashing easy. All you need is an
 * Add current sweep programming for DC-DC converters automatic characterization (with di/dv auto resolution)
 * Fix the minimum current issue (currently min is 5mA)
 * Fix the 4 terminal Kelvin connection on the 10mΩ current sense resistors in the PCB layout
-* 
+* ...
