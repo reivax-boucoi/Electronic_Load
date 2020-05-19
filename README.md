@@ -68,4 +68,4 @@ An ISP port is provided on the board, making reflashing easy. All you need is an
 
 * Add logging capability with serial interface
 * Fix the minimum current issue (currently min is 5mA)
-* Fix the 4 terminal Kelvin connection on the 10mΩ current sense resistors
+* Fix the 4 terminal Kelvin connection on the 10mΩ current sense resistors in the PCB layout
