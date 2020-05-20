@@ -30,6 +30,7 @@ Altough the device has not been fully qualified through systematic testing, here
 * Device current consumption : 50mA nominal (0.6W)
 * Load current range : 5mA - 5.25A, in 8mA steps
 * Current regulation : 5% +/- 8mA typical @ 8kHz bandwidth
+* Transient response : rise time < 1µs/A, overshoot < 2%
 * Constant Power/Resistance regulation bandwidth : 10Hz
 
 ---
@@ -66,3 +67,5 @@ An ISP port is provided on the board, making reflashing easy. All you need is an
 ## Improvements
 
 * Add logging capability with serial interface
+* Fix the minimum current issue (currently min is 5mA)
+* Fix the 4 terminal Kelvin connection on the 10mΩ current sense resistors
