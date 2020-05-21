@@ -35,7 +35,7 @@ Altough the device has not been fully qualified through systematic testing, here
 ---
 
 ## Schematic and Layout
-The heart of the system is an Atmel ATmega328P AVR microcontroller with 32kB of Flash and 2k of RAM. It interfaces an I2C 12bit DAC (the MCP47FEB21A1) and the LTC2992 dual power monitor chip.
+The heart of the system is an Atmel ATmega328P AVR microcontroller with 32kB of Flash and 2k of RAM running at a whopping 16MHz. It interfaces an I2C 12bit DAC (the MCP47FEB21A1) and the LTC2992 dual power monitor chip.
 
 
 The USB serial interface uses the MCP2221A bridge. The display is a classic 16x2 LCD.
