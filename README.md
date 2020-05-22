@@ -1,6 +1,9 @@
 # Electronic Load
 This repository hosts my work in developping a custom electronic load from scratch. 
-For more information on what an electronic load does and what it can be used for, see [this](https://www.mouser.com/pdfdocs/DC_Electronic_Load_Application_Note.pdf). Specifically, this load targets DC-DC converters testing, as it includes input and output power monitoring.
+For more information on what an electronic load does and what it can be used for, see [this](https://www.mouser.com/pdfdocs/DC_Electronic_Load_Application_Note.pdf). 
+
+Specifically, this load targets DC-DC converters testing, as it includes input and output power monitoring.
+
 I you have any question on this repository, feel free to contact the owner.
 
 ---
