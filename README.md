@@ -32,6 +32,7 @@ Altough the device has not been fully qualified through systematic testing, here
 ---
 
 ## Schematic and Layout
+The heart of the system is an Atmel AVR microcontroller with 32kB of Flash and 2k of SRAM.
 
 The schematic is available in a pdf and Eagle `.sch` format.
 The layout was done using the Eagle software. Gerbers, Eagle project files, top and bottom views are available on the `pcb` folder. PCBs were printed using JLCPCB service.
