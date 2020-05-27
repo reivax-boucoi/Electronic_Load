@@ -1,13 +1,14 @@
 # Electronic Load
 This repository hosts my work in developping a custom electronic load from scratch. 
-For more information on what an electronic load does and what it can be used for, see [this](https://www.mouser.com/pdfdocs/DC_Electronic_Load_Application_Note.pdf)
+For more information on what an electronic load does and what it can be used for, see [this](https://www.mouser.com/pdfdocs/DC_Electronic_Load_Application_Note.pdf). Specifically, this load targets DC-DC converters testing, as it includes input and output power monitoring.
+I you have any question on this repository, feel free to contact the owner.
 
 ---
 
 ### Features
 * Constant Current, Power and Resistance modes
 * Battery capacity logging with adjustable cutoff voltage
-* Input and output power logging : instant efficiency reading
+* Input and output power logging : instant efficiency reading for DC-DC converters
 * Rotary encoder driven interface
 * Dedicated Load ON/OFF button
 * Intuitive LCD menu system with editable values
