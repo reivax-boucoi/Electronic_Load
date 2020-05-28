@@ -13,7 +13,9 @@ For more information on what an electronic load does and what it can be used for
 * Intuitive LCD menu system with editable values
 * 12bit current, voltage and power measurements 
 * 30W continuous sinking capability, 250W peak
-* 
+* Temperature controlled fan.
+* Adjustable acquistion rate
+* 115200 bauds serial communication through USB with a PC (non-isolated !)
 
 ### Specifications
 > Enough talking, give us the specs, son !
@@ -23,15 +25,15 @@ Altough the device has not been fully qualified through systematic testing, here
 * Supply voltage range : 0 - 16V maximum, 12V nominal 
 * Device current consumption : 50mA nominal (0.6W)
 * Load current range : 5mA - 5.25A, in 8mA steps
-* Current regulation : 5% +/- 8mA typical
-* Constant Power/Resitance regulation bandwidth : 10Hz
+* Current regulation : 5% +/- 8mA typical @ 8kHz bandwidth
+* Constant Power/Resistance regulation bandwidth : 10Hz
 
 ---
 
 ## Schematic and Layout
 
 The schematic is available in a pdf and Eagle `.sch` format.
-The layout was done using the Eagle software. Gerbers, Eagle project files, top and bottom views are available on the `pcb` folder.
+The layout was done using the Eagle software. Gerbers, Eagle project files, top and bottom views are available on the `pcb` folder. PCBs were printed using JLCPCB service.
 
 
 ---
