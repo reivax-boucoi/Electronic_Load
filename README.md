@@ -2,6 +2,8 @@
 This repository hosts my work in developping a custom electronic load from scratch. 
 For more information on what an electronic load does and what it can be used for, see [this]
 
+---
+
 ### Features
 * Constant Current, Power and Resistance modes
 * Battery capacity logging with adjustable cutoff voltage
@@ -22,8 +24,11 @@ Altough the device has not been fully qualified through systematic testing, here
 * Current regulation : 5% +/- 8mA typical
 * Constant Power/Resitance regulation bandwidth : 10Hz
 
+---
 
 ## Schematic and Layout
+
+---
 
 ## Firmware
 The firmware for this device is currently in revision 1.3. It is written for a barebone ATmega328p Atmel microcontroller.
