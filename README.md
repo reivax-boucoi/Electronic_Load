@@ -83,18 +83,19 @@ To program the chip, execute : `avrdude -p m328p -c usbasp -P usb -U flash:w:fir
 ### Usage
 First apply power to the device through USB (for limited load capacity) or, better, 12V DC on the input power jack (beware of polarity).
 
-The welcome screen pops up with the following menus :
+The welcome screen pops up with the following menus : <img src="screenshots/mainmenu.jpg" alt="Image of mainmenu" width="200"/>
 
-<img src="screenshots/mainmenu.jpg" alt="Image of mainmenu" width="200"/>
-
-* Load allows you to set the load paramters
+* Load allows you to set the load parameters and mode (CC/CP/CR)
 * Battery enters the battery capacity mode
 * Meter measures input power
 * Settings is self explanatory
 
-Turn the rotary encoder to cycle through the menus, and push to enter. Here is what the Battery screen looks like :
+Turn the rotary encoder to cycle through the menus, and push to enter. Here is what the Battery screen looks like : <img src="screenshots/screen_batt.jpg" alt="Image of battscreen" width="200"/>
 
-<img src="screenshots/screen_batt.jpg" alt="Image of battscreen" width="200"/>
+Set the discharge current I and the cutoff voltage Vc before starting the load with the rightmost button. Accumulated capacity in Wh and Ah are displayed. The load will automatically shut off when the input voltage is below the cutoff voltage. The total capacity will remain displayed until the load is restarted in this mode.
+
+The meter screen shows the following informations : <img src="screenshots/screen_meter.jpg" alt="Image of meterscreen" width="200"/>
+
 
 ---
 
