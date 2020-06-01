@@ -1,4 +1,7 @@
 # Electronic Load
+
+<img src="screenshots/top_assembled.jpg" alt="Image of top assembled" width="400" text-align: center/>
+
 This repository hosts my work in developping a custom electronic load from scratch. 
 For more information on what an electronic load does and what it can be used for, see [this](https://www.mouser.com/pdfdocs/DC_Electronic_Load_Application_Note.pdf). 
 
