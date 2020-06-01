@@ -94,18 +94,21 @@ The welcome screen pops up with the following menus :
 
 Turn the rotary encoder to cycle through the menus, and push to enter. 
 
-Here is what the Battery screen looks like : 
+Here is what the Battery screen looks like :
 
 <img src="screenshots/screen_batt.jpg" alt="Image of battscreen" width="200" text-align: center/>
 
 Set the discharge current I and the cutoff voltage Vc before starting the load with the rightmost button. Accumulated capacity in Wh and Ah are displayed. The load will automatically shut off when the input voltage is below the cutoff voltage. The total capacity will remain displayed until the load is restarted in this mode.
 
-The meter screen shows the input measurements : 
+The meter screen shows the input measurements :
 
 <img src="screenshots/screen_meter.jpg" alt="Image of meterscreen" width="200" text-align: center/>
 
-The settings screen alows to modify various parameters : <img src="screenshots/screen_settings.jpg" alt="Image of settingsscreen" width="200" text-align: center/>
- It monitors the supply voltage and you can change the threshold temperature for the fan, as well as the refresh rate of the screen. Note that the load has a hard temperature stop defined in `Load.h`, and a maximum refreqh rate of approx 10Hz.
+The settings screen alows to modify various parameters : 
+
+<img src="screenshots/screen_settings.jpg" alt="Image of settingsscreen" width="200" text-align: center/>
+
+It monitors the supply voltage and you can change the threshold temperature for the fan, as well as the refresh rate of the screen. Note that the load has a hard temperature stop defined in `Load.h`, and a maximum refreqh rate of approx 10Hz.
  
 
 
