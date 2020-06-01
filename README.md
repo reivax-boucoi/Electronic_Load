@@ -10,7 +10,7 @@ I you have any question on this repository, feel free to contact the owner at (x
 ---
 
 ### Features
-
+---
 * Constant Current, Power and Resistance modes
 * Battery capacity logging with adjustable cutoff voltage
 * Input and output power logging : instant efficiency reading for DC-DC converters
@@ -24,6 +24,7 @@ I you have any question on this repository, feel free to contact the owner at (x
 * 115200 bauds serial communication through USB with a PC (non-isolated !)
 
 ### Specifications
+---
 > Enough talking, give us the specs, son !
 
 Altough the device has not been fully qualified through systematic testing, here are the basic specs you can expect. 
@@ -39,6 +40,8 @@ Altough the device has not been fully qualified through systematic testing, here
 ---
 
 ## Schematic and Layout
+---
+
 The heart of the system is an Atmel ATmega328P AVR microcontroller with 32kB of Flash and 2k of RAM running at a whopping 16MHz. It interfaces an I2C 12bit DAC (the MCP47FEB21A1) and the LTC2992 dual power monitor chip.
 
 The USB serial interface uses the MCP2221A bridge. The display is a classic 16x2 LCD.
@@ -55,12 +58,13 @@ An expansion/debug port is provided, with +5V, ground, I2C and UART available.
 
 There are several issues regarding the layout of the PCB, as it is a first version. Improper Kelvin connections to the current sense resistors, or wrong hole size for the power input connector by example. The heatsink originally used is salvaged from old equipement and the footprint may not be relevant to anyone else. Space for rubber feet placement should be included. Also, the LCD is too close to the heatsink, which is impractical during assembly (especially accessing the fan and temp sensor connector).
 
-
-
 ---
 ---
+
 
 ## Firmware
+---
+
 The firmware for this device is currently in revision 1.3. It is written for a barebone ATmega328p Atmel microcontroller.
 
 ```18604 bytes (60%) of program storage space. Maximum is 30720 bytes.```
@@ -68,9 +72,10 @@ The firmware for this device is currently in revision 1.3. It is written for a b
 ```1635 bytes (79%) of dynamic memory, 413 bytes left. Maximum is 2048 bytes.```
 
 As you can see it's not the lightest firmware, mostly due to the use of the `Wire` and `LCD` librairies from Arduino, which are bulky. However, there is still enough room for future improvements. Just keep in mind if you want to improve the project to leave space for local variables allocation.
----
 
 ### Programming
+---
+
 An ISP port is provided on the board, making reflashing easy. All you need is an AVR-compatible programmer with the standard 10 pins ICSP header. I used the very good (and very cheap!) [Usbasp](https://www.fischl.de/usbasp/) during developpement. Avrdude can be used to download the pre-compiled binary `main.hex`, or you can compile the project yourself first.
 `Avr Fuses settings :(E:FD, H:DE, L:FF)`
 
