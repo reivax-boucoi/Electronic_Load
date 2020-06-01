@@ -82,7 +82,15 @@ To program the chip, execute : `avrdude -p m328p -c usbasp -P usb -U flash:w:fir
 
 ### Usage
 First apply power to the device through USB (for limited load capacity) or, better, 12V DC on the input power jack (beware of polarity).
+<<<<<<< HEAD
 The welcome screen pops up with the following menus :<img src="screenshots/mainmenu.jpg" alt="Image of mainmenu" width="200"/>
+=======
+
+The welcome screen pops up with the following menus :
+
+<img src="screenshots/mainmenu.jpg" alt="Image of mainmenu" width="250"/>
+
+>>>>>>> 0f273e8ad3a55c705a9c9c9bb6876ebeadfd6504
 ---
 
 ## Improvements
