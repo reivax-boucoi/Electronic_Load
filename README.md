@@ -148,4 +148,5 @@ It monitors the supply voltage and you can change the threshold temperature for 
 * Fix the 4 terminal Kelvin connection on the 10mΩ current sense resistors in the PCB layout
 * Design a usb isolator companion board or add SD card logging addon on i2c bus.
 * Better code commenting
+* Save last used confguration on EEPROM for next power-up.
 * ...
