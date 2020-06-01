@@ -9,7 +9,7 @@ Specifically, this load targets DC-DC converters testing, as it includes input a
 
 <img src="screenshots/DCtoDCconverter_characterization.png" width="400" text-align: center/>
 
-I you have any question on this repository, feel free to contact the owner at (xavier[dot]bourlot[at]gmail[dot]com).
+I you have any question on this repository, feel free to contact the owner at (reivax[dot]boucoi[at]laposte[dot]net).
 
 ---
 ---
