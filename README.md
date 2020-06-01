@@ -74,9 +74,15 @@ To program the chip, execute : `avrdude -p m328p -c usbasp -P usb -U flash:w:fir
 
 ### Software structure
 
+* Display related stuff : `Screen.cpp`, `Menu.cpp`
+* LTC2992 power monitoring stuff : `PM.cpp`
+* DC Load stuff : `Load.cpp`
+* Generic io interfacing : `Utils.cpp`, `SimpleRotary.cpp`, `Wire.cpp`, `LCD.cpp`
+* Control loop and display update : `main.cpp`
 
 ### Usage
-
+First apply power to the device through USB (for limited load capacity) or, better, 12V DC on the input power jack (beware of polarity).
+The welcome screen pops up with the following menus :<img src="screenshots/mainmenu.jpg" alt="Image of mainmenu" width="250"/>
 ---
 
 ## Improvements
@@ -88,4 +94,5 @@ To program the chip, execute : `avrdude -p m328p -c usbasp -P usb -U flash:w:fir
 * Fix the minimum current issue (currently min is 5mA)
 * Fix the 4 terminal Kelvin connection on the 10mΩ current sense resistors in the PCB layout
 * Design a usb isolator companion board or add SD card logging addon on i2c bus.
+* Better code commenting
 * ...
