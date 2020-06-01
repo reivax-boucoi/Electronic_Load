@@ -29,7 +29,7 @@ I you have any question on this repository, feel free to contact the owner at (r
 * 115200 bauds serial communication through USB with a PC (non-isolated !)
 
 ### Specifications
-> Enough talking, give us the specs, son !
+> Enough talk, give us the specs, son !
 
 Altough the device has not been fully qualified through systematic testing, here are the basic specs you can expect. 
 * Input voltage range : 0 - 100V DC maximum, 2-80V DC regulating
