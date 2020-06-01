@@ -67,7 +67,7 @@ The firmware for this device is currently in revision 1.3. It is written for a b
 
 As you can see it's not the lightest firmware, mostly due to the use of the `Wire` and `LCD` librairies from Arduino, which are bulky. However, there is still enough room for future improvements. Just keep in mind if you want to improve the project to leave space for local variables allocation.
 ### Programming
-An ISP port is provided on the board, making reflashing easy. All you need is an AVR-compatible programmer with the standard 10 pins ICSP header. I used the very good (and very cheap!) [Usbasp] during developpement. Avrdude can be used to download the pre-compiled binary `main.hex`, or you can compile the project yourself first.
+An ISP port is provided on the board, making reflashing easy. All you need is an AVR-compatible programmer with the standard 10 pins ICSP header. I used the very good (and very cheap!) [Usbasp](https://www.fischl.de/usbasp/) during developpement. Avrdude can be used to download the pre-compiled binary `main.hex`, or you can compile the project yourself first.
 `Avr Fuses settings :(E:FD, H:DE, L:FF)`
 
 To program the chip, execute : `avrdude -p m328p -c usbasp -P usb -U flash:w:firmware/main.hex`
@@ -92,7 +92,15 @@ The welcome screen pops up with the following menus :
 * Meter measures input power
 * Settings is self explanatory
 
-Turn the rotary encoder to cycle through the menus, and push to enter. 
+Turn the rotary encoder to cycle through the menus and screens, and push to enter. At any time use the back button (to the right of the encoder) to get back to the previous menu or exit editing mode. 
+
+Editing a value starts by selecting the value to edit. Press enter on a screen, you should get a flashing square in front of a value. Turn the knob until the desired value is selected. Press enter to edit. The leftmost digit is selected. To change the edited digit, press enter once again. Press back to validate. 
+
+**You will have to restart the load in order for the changes to take effect.** This is done to prevent happy little accidents. To start and stop the load, press the rightmost button. The blue LED should light up. Is the LED turns red, a fault occured. Faults can happen if :
+* the heatsink temperature exceeds the hard temperature stop defined in `Load.h`
+* the load fails to regulate. This will mostly be caused by the DUT hiccuping (or sharp V/I curve), or insufficent power to the Electronic Load.
+
+The load menu has 4 screens, 
 
 Here is what the Battery screen looks like :
 
@@ -108,7 +116,7 @@ The settings screen alows to modify various parameters :
 
 <img src="screenshots/screen_settings.jpg" alt="Image of settingsscreen" width="200" text-align: center/>
 
-It monitors the supply voltage and you can change the threshold temperature for the fan, as well as the refresh rate of the screen. Note that the load has a hard temperature stop defined in `Load.h`, and a maximum refreqh rate of approx 10Hz.
+It monitors the supply voltage and you can change the threshold temperature for the fan, as well as the refresh rate of the screen. Note that the load has a hard temperature stop defined in `Load.h`, and a maximum refresh rate of approx 10Hz.
  
 
 
