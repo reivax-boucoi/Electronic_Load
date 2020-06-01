@@ -91,6 +91,7 @@ The welcome screen pops up with the following menus : <img src="screenshots/main
 * Settings is self explanatory
 
 Turn the rotary encoder to cycle through the menus, and push to enter. 
+
 Here is what the Battery screen looks like : <img src="screenshots/screen_batt.jpg" alt="Image of battscreen" width="200"/>
 
 Set the discharge current I and the cutoff voltage Vc before starting the load with the rightmost button. Accumulated capacity in Wh and Ah are displayed. The load will automatically shut off when the input voltage is below the cutoff voltage. The total capacity will remain displayed until the load is restarted in this mode.
