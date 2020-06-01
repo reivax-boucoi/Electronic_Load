@@ -7,6 +7,7 @@ Specifically, this load targets DC-DC converters testing, as it includes input a
 I you have any question on this repository, feel free to contact the owner at (xavier[dot]bourlot[at]gmail[dot]com).
 
 ---
+---
 
 ### Features
 
@@ -35,6 +36,7 @@ Altough the device has not been fully qualified through systematic testing, here
 * Constant Power/Resistance regulation bandwidth : 10Hz
 
 ---
+---
 
 ## Schematic and Layout
 The heart of the system is an Atmel ATmega328P AVR microcontroller with 32kB of Flash and 2k of RAM running at a whopping 16MHz. It interfaces an I2C 12bit DAC (the MCP47FEB21A1) and the LTC2992 dual power monitor chip.
@@ -55,7 +57,7 @@ There are several issues regarding the layout of the PCB, as it is a first versi
 
 
 
-
+---
 ---
 
 ## Firmware
@@ -66,11 +68,15 @@ The firmware for this device is currently in revision 1.3. It is written for a b
 ```1635 bytes (79%) of dynamic memory, 413 bytes left. Maximum is 2048 bytes.```
 
 As you can see it's not the lightest firmware, mostly due to the use of the `Wire` and `LCD` librairies from Arduino, which are bulky. However, there is still enough room for future improvements. Just keep in mind if you want to improve the project to leave space for local variables allocation.
+---
+
 ### Programming
 An ISP port is provided on the board, making reflashing easy. All you need is an AVR-compatible programmer with the standard 10 pins ICSP header. I used the very good (and very cheap!) [Usbasp](https://www.fischl.de/usbasp/) during developpement. Avrdude can be used to download the pre-compiled binary `main.hex`, or you can compile the project yourself first.
 `Avr Fuses settings :(E:FD, H:DE, L:FF)`
 
 To program the chip, execute : `avrdude -p m328p -c usbasp -P usb -U flash:w:firmware/main.hex`
+
+---
 
 ### Software structure
 
@@ -79,6 +85,8 @@ To program the chip, execute : `avrdude -p m328p -c usbasp -P usb -U flash:w:fir
 * DC Load stuff : `Load.cpp`
 * Generic io interfacing : `Utils.cpp`, `SimpleRotary.cpp`, `Wire.cpp`, `LCD.cpp`
 * Control loop and display update : `main.cpp`
+
+---
 
 ### Usage
 First apply power to the device through USB (for limited load capacity) or, better, 12V DC on the input power jack (beware of polarity).
@@ -100,6 +108,7 @@ Editing a value starts by selecting the value to edit. Press enter on a screen, 
 * the heatsink temperature exceeds the hard temperature stop defined in `Load.h`
 * the load fails to regulate. This will mostly be caused by the DUT hiccuping (or sharp V/I curve), or insufficent power to the Electronic Load.
 
+
 The load menu has 4 screens, 
 
 Here is what the Battery screen looks like :
@@ -119,7 +128,7 @@ The settings screen alows to modify various parameters :
 It monitors the supply voltage and you can change the threshold temperature for the fan, as well as the refresh rate of the screen. Note that the load has a hard temperature stop defined in `Load.h`, and a maximum refresh rate of approx 10Hz.
  
 
-
+---
 ---
 
 ## Improvements
