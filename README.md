@@ -112,10 +112,7 @@ Editing a value starts by selecting the value to edit. Press enter on a screen, 
 
 The load menu has 4 screens : 
 
-<img src="screenshots/screen_cc.jpg" alt="Image of ccscreen" width="200" text-align: center/>
-<img src="screenshots/screen_cp.jpg" alt="Image of ccscreen" width="200" text-align: center/>
-<img src="screenshots/screen_cr.jpg" alt="Image of ccscreen" width="200" text-align: center/>
-<img src="screenshots/screen_cr.jpg" alt="Image of ccscreen" width="200" text-align: center/>
+<img src="screenshots/screen_cc.jpg" alt="Image of ccscreen" width="200" text-align: center/><img src="screenshots/screen_cp.jpg" alt="Image of ccscreen" width="200" text-align: center/><img src="screenshots/screen_cr.jpg" alt="Image of ccscreen" width="200" text-align: center/><img src="screenshots/screen_ce.jpg" alt="Image of ccscreen" width="200" text-align: center/>
 
 Here is what the Battery screen looks like :
 
