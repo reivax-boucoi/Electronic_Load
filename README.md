@@ -11,6 +11,8 @@ Specifically, this load targets DC-DC converters testing, as it includes input a
 
 I you have any question on this repository, feel free to contact the owner at (reivax[dot]boucoi[at]laposte[dot]net).
 
+Featured on [Hackaday](https://hackaday.com/2020/06/06/a-diy-electronic-load-with-a-twist/) !
+
 ---
 ---
 
