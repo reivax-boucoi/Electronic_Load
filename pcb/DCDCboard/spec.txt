@@ -13,3 +13,9 @@ Current = ~0.3A 	system + fan(beware of turn on current)
 
 
 Calculation :
+
+Pout = 12*.3 = 3.6W
+Estimated efficiency = 70%
+Pin = 3.6/.7 = 5.2W	Is this doable with USB ? What params for MCP2221A to request current ?
+
+
