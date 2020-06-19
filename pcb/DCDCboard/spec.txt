@@ -4,7 +4,12 @@ Voltage = 4.8V		USB (before diode so to not backfeed)
 
 => implies to step down for system power with linear reg (inefficient)
 
+Current = 
+
 Output :
 
 Voltage = 12V nom +-.3V ripple max
 Current = ~0.3A 	system + fan(beware of turn on current)
+
+
+Calculation :
