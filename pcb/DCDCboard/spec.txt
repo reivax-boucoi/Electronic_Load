@@ -1,10 +1,10 @@
 Input :
 
-Voltage = USB (before diode so to not backfeed)
+Voltage = 4.8V		USB (before diode so to not backfeed)
 
-=> implies to step down with linear reg (inefficient)
+=> implies to step down for system power with linear reg (inefficient)
 
 Output :
 
 Voltage = 12V nom +-.3V ripple max
-Current = system + fan(beware of turn on current)
+Current = ~0.3A 	system + fan(beware of turn on current)
