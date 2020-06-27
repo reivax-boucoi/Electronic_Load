@@ -167,7 +167,7 @@ TODO here
 - [x] Re-think the menu system to be more modular / lower size
 - [x] Add logging capability with serial interface
 - [x] Add current sweep programming for DC-DC converters automatic characterization (with di/dv auto resolution)
-* Cleanup and enhance the serial interface (add change mode command) 
+* Cleanup and enhance the serial interface (add change mode command, load on/off) 
 * Provide python example for graphing live data
 * Fix the minimum current issue (currently min is 5mA)
 * Fix the 4 terminal Kelvin connection on the 10mΩ current sense resistors in the PCB layout
