@@ -150,7 +150,7 @@ It monitors the supply voltage and you can change the threshold temperature for 
 
 Several remote operations are available currently. The serial interface provided though USB (115200 bauds) defines the following commands :
 - `get [x]` : returns current load data in the format shown above. Once the load is manually started, it will take x samples at the acquisition time currently defined and then shut the load down.
-- `sweep b e s` : sweeps the current settable value from `b` to `e` in `s` steps. The load is automatically enables and disabled.
+- `sweep b e s` : sweeps the current settable value from `b` to `e` in `s` steps. Therefore, current, power or equivalent resistance can be characterized. THis mode is especially The load is automatically enabled and disabled.
 
 Parameters beween brackets are optional.
 
