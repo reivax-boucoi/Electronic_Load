@@ -152,6 +152,7 @@ Several remote operations are available currently. The serial interface provided
 - `get [x]`
 
 
+Parameters beween brackets are optionnal.
 
 ---
 ---
