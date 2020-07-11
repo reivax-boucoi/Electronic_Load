@@ -148,7 +148,7 @@ It monitors the supply voltage and you can change the threshold temperature for 
 
 ### Serial interface
 
-Several remote operations are available currently. THe serial interface provided though USB
+Several remote operations are available currently. The serial interface provided though USB (115200 bauds)
 
 ---
 ---
