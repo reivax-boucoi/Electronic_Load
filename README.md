@@ -154,6 +154,7 @@ It monitors the supply voltage and you can change the threshold temperature for 
 - [x] Add logging capability with serial interface
 - [x] Add current sweep programming for DC-DC converters automatic characterization (with di/dv auto resolution)
 * Cleanup and enhance the serial interface 
+* Provide python example for graphing live data
 * Fix the minimum current issue (currently min is 5mA)
 * Fix the 4 terminal Kelvin connection on the 10mΩ current sense resistors in the PCB layout
 * Design a usb isolator companion board or add SD card logging addon on i2c bus.
