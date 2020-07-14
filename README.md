@@ -159,5 +159,5 @@ It monitors the supply voltage and you can change the threshold temperature for 
 * Design a usb isolator companion board or add SD card logging addon on i2c bus.
 * Design 4.5V->12V boost addon to allow full operation from usb power (check usb power requirements before !)
 * Better code commenting
-* Save last used confguration on EEPROM for next power-up.
+* Save last used confguration on EEPROM for next power-up (is this really needed ?).
 * ...
