@@ -157,7 +157,7 @@ It monitors the supply voltage and you can change the threshold temperature for 
 * Fix the minimum current issue (currently min is 5mA)
 * Fix the 4 terminal Kelvin connection on the 10mΩ current sense resistors in the PCB layout
 * Design a usb isolator companion board or add SD card logging addon on i2c bus.
-* Design 4.5V->12V boost addon to allow full operation from usb power
+* Design 4.5V->12V boost addon to allow full operation from usb power (check usb power requirements before !)
 * Better code commenting
 * Save last used confguration on EEPROM for next power-up.
 * ...
