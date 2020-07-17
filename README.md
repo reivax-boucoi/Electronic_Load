@@ -151,7 +151,7 @@ It monitors the supply voltage and you can change the threshold temperature for 
 
 - [x] Design a mechanical mount for the fan / stabilize the board
 - [x] Re-think the menu system to be more modular / lower size
-- [x] Add logging capability with serial interface (could be improved)
+- [x] Add logging capability with serial interface
 - [x] Add current sweep programming for DC-DC converters automatic characterization (with di/dv auto resolution) (could be improved)
 * Cleanup and enhance the serial interface 
 * Fix the minimum current issue (currently min is 5mA)
