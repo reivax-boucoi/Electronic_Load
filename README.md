@@ -131,7 +131,7 @@ Here is what the Battery screen looks like :
 
 <img src="screenshots/screen_batt.jpg" alt="Image of battscreen" width="200" text-align: center/>
 
-Set the discharge current I and the cutoff voltage Vc before starting the load with the rightmost button. Accumulated capacity in Wh and Ah are displayed. The load will automatically shut off when the input voltage is below the cutoff voltage. The total capacity will remain displayed until the load is restarted in this mode.
+Set the constant discharge current I and the cutoff voltage Vc before starting the load with the rightmost button. Accumulated capacity in Wh and Ah are displayed. The load will automatically shut off when the input voltage is below the cutoff voltage. The total capacity will remain displayed until the load is restarted in this mode.
 
 The meter screen shows the input measurements :
 
