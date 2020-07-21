@@ -123,7 +123,7 @@ The load menu has 4 screens :
 
 <img src="screenshots/screen_cc.jpg" alt="Image of ccscreen" width="200" text-align: center/><img src="screenshots/screen_cp.jpg" alt="Image of cpscreen" width="200" text-align: center/><img src="screenshots/screen_cr.jpg" alt="Image of crscreen" width="200" text-align: center/><img src="screenshots/screen_eff.jpg" alt="Image of effscreen" width="200" text-align: center/>
 
-The last screen shows the power lost in the DUT (Pr), the efficency, the input and output voltages of the converter.
+The last screen shows the power lost in the DUT (Pr), the efficiency, the input and output voltages of the converter.
 
 The load mode (CC/CP/CR) is determined by the screen displayed when the load is started. If the screen is not one of the CC/CP/CR screens, is starts in the previously used mode.
 
