@@ -114,7 +114,7 @@ Turn the rotary encoder to cycle through the menus and screens, and push to ente
 
 Editing a value starts by selecting the value to edit. Press enter on a screen, you should get a flashing square in front of a value. Turn the knob until the desired value is selected. Press enter to edit. The leftmost digit is selected. To change the edited digit, press enter once again. Press back to validate. 
 
-**You will have to restart the load in order for the changes to take effect.** This is done to prevent happy little accidents. To start and stop the load, press the rightmost button. The rightmost blue LED should light up. If the LED turns red, a fault occured. Faults can happen if :
+**You will have to restart the load in order for the changes to take effect.** This is done to prevent happy little accidents. To start and stop the load, press the rightmost button. The rightmost blue LED should light up. If the rightmost LED turns red, a fault occured. Faults can happen if :
 * The heatsink temperature exceeds the hard temperature stop defined in `Load.h`
 * The load fails to regulate. This will mostly be caused by the DUT hiccuping (or sharp V/I curve), or insufficent power to the Electronic Load.
 
