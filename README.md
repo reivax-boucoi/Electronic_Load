@@ -92,6 +92,7 @@ To program the chip, execute : `avrdude -p m328p -c usbasp -P usb -U flash:w:fir
 * LTC2992 power monitoring stuff : `PM.cpp`
 * DC Load stuff : `Load.cpp`
 * Generic io interfacing : `Utils.cpp`, `SimpleRotary.cpp`, `Wire.cpp`, `LCD.cpp`
+* Serial command parsing : `SerialCommand.cpp`
 * Control loop and display update : `main.cpp`
 
 ---
