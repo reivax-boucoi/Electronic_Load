@@ -70,9 +70,9 @@ There are several issues regarding the layout of the PCB, as it is a first versi
 ## Firmware
 The firmware for this device is currently in revision 1.3. It is written for a barebone ATmega328p Atmel microcontroller.
 
-```18604 bytes (60%) of program storage space. Maximum is 30720 bytes.```
+```20014 bytes (65%) of program storage space. Maximum is 30720 bytes.```
 
-```1635 bytes (79%) of dynamic memory, 413 bytes left. Maximum is 2048 bytes.```
+```1586 bytes (77%) of dynamic memory, 462 bytes left. Maximum is 2048 bytes.```
 
 As you can see it's not the lightest firmware, mostly due to the use of the `Wire` and `LCD` librairies from Arduino, which are bulky. However, there is still enough room for future improvements. Just keep in mind if you want to improve the project to leave space for local variables allocation.
 
