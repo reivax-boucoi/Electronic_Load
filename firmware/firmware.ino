@@ -256,10 +256,10 @@ void loop() {
 
         if (interface_nbSteps && load.onState) {//wait for the load to be on to take samples
             interface_nbSteps--;
+            interface_printLoad(false);
             if (interface_nbSteps == 0) {
                 load.off();
             } else {
-                interface_printLoad(false);
                 if ((*inteface_varPt).change(interface_stepsize)) {
                     interface_nbSteps = 0;
                     load.off();
@@ -301,12 +301,12 @@ void BTN_LOAD_check(void) {
             } else {
                 getLoadModeFromMenu();
                 load.on(calc_iload());
-                /*
+                
                     Serial.print(F("Load turned on in "));
                     Serial.print(loadName[loadMode]);
                     Serial.print(F(", current set to "));
                     Serial.println(calc_iload());
-                */
+                
             }
         }
     }
@@ -398,7 +398,6 @@ void build_menu(void) {
     mainMenu.addMenuItem(&meterItem);
     mainMenu.addMenuItem(&battItem);
 }
-
 void interface_printLoad(bool header) {
     if (header) {
         Serial.println(F("Mode\tI(mA)\tV\tP(mW)\tIin(mA)\tVin\tPin(mW)\tEff(%)"));
@@ -421,7 +420,6 @@ void interface_printLoad(bool header) {
         Serial.println(F("\t"));
     }
 }
-
 void interface_load() {
     char *arg;
     arg = SCmd.next();
