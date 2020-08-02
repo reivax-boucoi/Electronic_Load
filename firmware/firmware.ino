@@ -422,13 +422,15 @@ void interface_printLoad(bool header) {
     }
 }
 
-    void interface_load() {
+void interface_load() {
     char *arg;
     arg = SCmd.next();
     if (arg != NULL) {
+        getLoadModeFromMenu();
         if (arg == "1") {
-                load.on(calc_iload());
+            load.on(calc_iload());
         } else if (arg == "0") {
+            load.off();
         } else {
             interface_unrecognized();
         }
@@ -450,11 +452,11 @@ void interface_mode() {
 }
 void interface_get() {
     char *arg = SCmd.next();
-        interface_stepsize = 0.0;
+    interface_stepsize = 0.0;
     if (arg != NULL) {
         interface_nbSteps = atol(arg);
-    }else{
-        interface_nbSteps=1;
+    } else {
+        interface_nbSteps = 1;
     }
     interface_printLoad(true);
 }
