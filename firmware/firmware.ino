@@ -450,9 +450,11 @@ void interface_mode() {
 }
 void interface_get() {
     char *arg = SCmd.next();
+        interface_stepsize = 0.0;
     if (arg != NULL) {
         interface_nbSteps = atol(arg);
-        interface_stepsize = 0.0;
+    }else{
+        interface_nbSteps=1;
     }
     interface_printLoad(true);
 }
