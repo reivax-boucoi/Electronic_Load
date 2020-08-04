@@ -421,20 +421,20 @@ void interface_printLoad(bool header) {
         Serial.println(F("\t"));
     }
 }
-/*
+
     void interface_load() {
     char *arg;
     arg = SCmd.next();
     if (arg != NULL) {
         if (arg == "1") {
-            Serial.println(F("turning load on"));
+                load.on(calc_iload());
         } else if (arg == "0") {
-            Serial.println(F("turning load off"));
         } else {
             interface_unrecognized();
         }
     }
-    }*/
+}
+
 void interface_mode() {
     char *arg;
     arg = SCmd.next();
