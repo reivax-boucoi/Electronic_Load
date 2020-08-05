@@ -28,7 +28,7 @@
 #define VOLTAGE_MAX 50.0
 #define RSET_MAX 1000.0
 #define RSET_MIN 0.2
-#define CURRENT_MAX 5.5
+#define CURRENT_MAX 5.1
 #define POWER_MAX   500.0
 
 #define OUTOFREGNB  10
