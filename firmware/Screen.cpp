@@ -61,11 +61,19 @@ void Value::down(void) {
     dispVal = (*val);
 }
 
-void Value::change(float inc) {
+bool Value::change(float inc) {
+    bool sat=false;
      (*val) +=  inc;
-    if ((*val) > maxVal)(*val) = maxVal;
-    if ((*val) < minVal)(*val) = minVal;
+    if ((*val) > maxVal){
+        (*val) = maxVal;
+        sat=true;
+    }
+    if ((*val) < minVal){
+        (*val) = minVal;
+        sat=true;
+    }
     dispVal = (*val);
+    return sat;
 }
 
 void Value::advanceCursor(void) {

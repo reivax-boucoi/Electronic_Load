@@ -260,7 +260,11 @@ void loop() {
                 load.off();
             } else {
                 interface_printLoad(false);
-                (*inteface_varPt).change(interface_stepsize);
+                if ((*inteface_varPt).change(interface_stepsize)) {
+                    interface_nbSteps = 0;
+                    load.off();
+                    Serial.println(F("Sweep exceeded parameter limits"));
+                }
             }
         }
 
@@ -338,6 +342,7 @@ float calc_iload(void) {
             outOfReg = 0;
             load.fault = true;
             Serial.println(F("Regulation can't keep up"));
+            interface_nbSteps = 0;
         }
         } else {
         outOfReg = 0;
