@@ -446,7 +446,7 @@ void interface_mode() {
 void interface_get() {
     char *arg = SCmd.next();
     if (arg != NULL) {
-        interface_nbSteps = atoi(arg);
+        interface_nbSteps = atol(arg);
         interface_stepsize = 0.0;
     }
     interface_printLoad(true);
@@ -456,14 +456,14 @@ void interface_sweep() {
     float a, b;
     char *arg = SCmd.next();
     if (arg != NULL) {
-        a = (float)atoi(arg) / 1000.0;
+        a = (float)atol(arg) / 1000.0;
         arg = SCmd.next();
         if (arg != NULL) {
-            b = (float)atoi(arg) / 1000.0;
+            b = (float)atol(arg) / 1000.0;
             arg = SCmd.next();
             if (arg != NULL) {
 
-                interface_nbSteps = atoi(arg);
+                interface_nbSteps = atol(arg);
                 interface_stepsize = (float)(b - a) / ((float)interface_nbSteps);
                 interface_nbSteps++;
                 getLoadModeFromMenu();
