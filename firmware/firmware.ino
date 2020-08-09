@@ -83,8 +83,8 @@ float pdisp_load = 0;
 //lost power
 float p_loss = 0;
 
-float refresh_rate = 1.0; //acquisition time
-float fan_temp = 32.0; //fan temp
+float refresh_rate = .5; //acquisition time
+float fan_temp = 35.0; //fan temp
 float eff = 0;
 
 //battery values
