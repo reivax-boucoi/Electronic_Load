@@ -125,6 +125,7 @@ void SerialCommand::readSerial()
                     Serial.println(token);
 #endif
                     // Execute the stored handler function for the command
+                    Serial.print(F("\r\n"));
                     (*CommandList[i].function)();
                     clearBuffer();
                     matched = true;

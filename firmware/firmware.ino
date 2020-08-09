@@ -83,7 +83,7 @@ float pdisp_load = 0;
 //lost power
 float p_loss = 0;
 
-float refresh_rate = .5; //acquisition time
+float refresh_rate = 1.0; //acquisition time
 float fan_temp = 32.0; //fan temp
 float eff = 0;
 
@@ -204,7 +204,7 @@ void loop() {
 
     if (time1 + ACQ_TIME < millis()) {  //occurs @ 10Hz
 
-        digitalWrite(LEDB1_PIN, HIGH);
+        //digitalWrite(LEDB1_PIN, HIGH);
         if (pm.dataReady()) {
             pm.readInputPower(&v_meas, &i_meas, &p_meas);
             pm.readOutputPower(&vdisp_load, &idisp_load, &pdisp_load);
@@ -228,7 +228,7 @@ void loop() {
             }
         }
 
-        digitalWrite(LEDB1_PIN, LOW);
+        //digitalWrite(LEDB1_PIN, LOW);
         time1 = millis();
     } else if (time2 + refresh_rate * 1000 < millis()) { //occurs @ refreshRate(0.5s default)
         digitalWrite(LEDB1_PIN, HIGH);
@@ -254,18 +254,38 @@ void loop() {
 
         mainMenu.refresh();
 
-        if (interface_nbSteps) {
-            interface_printLoad(false);
+        if (interface_nbSteps && load.onState) {//wait for the load to be on to take samples
             interface_nbSteps--;
-            (*inteface_varPt).change(interface_stepsize);
+            if (interface_nbSteps == 0) {
+                load.off();
+            } else {
+                interface_printLoad(false);
+                (*inteface_varPt).change(interface_stepsize);
+            }
         }
-        
+
         digitalWrite(LEDB1_PIN, LOW);
         time2 = millis();
     }
     interface_poll();
 }
 
+void getLoadModeFromMenu(void) {
+    if (mainMenu.entered) {    //update load mode based on current menu. If not a CC/CP/CR/BATT menu keep the last mode
+        MenuItem* m = mainMenu.selectedMenuItem;
+        if (m->selectedScreen == &CCloadScreen) {
+            loadMode = CC;
+        } else if (m->selectedScreen == &CPloadScreen) {
+            loadMode = CP;
+        } else if (m->selectedScreen == &CRloadScreen) {
+            loadMode = CR;
+        } else if (m == &battItem) {
+            loadMode = BATT;
+            capAh_batt = 0;
+            capWh_batt = 0;
+        }
+    }
+}
 
 void BTN_LOAD_check(void) {
     if (digitalRead(BTN_LOAD_PIN) != BTN_LOAD_state) {
@@ -273,39 +293,13 @@ void BTN_LOAD_check(void) {
         if (!BTN_LOAD_state) {
             if (load.onState) {
                 load.off();
-                Serial.println(F("Load turned off"));
+                //Serial.println(F("Load turned off"));
             } else {
-                if (mainMenu.entered) {    //update load mode based on current menu. If not a CC/CP/CR/BATT menu keep the last mode
-                    MenuItem* m = mainMenu.selectedMenuItem;
-                    if (m->selectedScreen == &CCloadScreen) {
-                        loadMode = CC;
-                    } else if (m->selectedScreen == &CPloadScreen) {
-                        loadMode = CP;
-                    } else if (m->selectedScreen == &CRloadScreen) {
-                        loadMode = CR;
-                    } else if (m == &battItem) {
-                        loadMode = BATT;
-                        capAh_batt = 0;
-                        capWh_batt = 0;
-                    }
-                }
+                getLoadModeFromMenu();
                 load.on(calc_iload());
-                /*  Serial.print(F("Load turned on in "));
-                    switch (loadMode) {
-                    case CC:
-                        Serial.print(F("CC mode"));
-                        break;
-                    case CP:
-                        Serial.print(F("CP mode"));
-                        break;
-                    case CR:
-                        Serial.print(F("CR mode"));
-                        break;
-                    case BATT:
-                        Serial.print(F("BATT mode : cutoff "));
-                        Serial.print(vcutoff_batt);
-                        break;
-                    }
+                /*
+                    Serial.print(F("Load turned on in "));
+                    Serial.print(loadName[loadMode]);
                     Serial.print(F(", current set to "));
                     Serial.println(calc_iload());
                 */
@@ -338,16 +332,16 @@ float calc_iload(void) {
             break;
     }
 
-    if (load.onState && ((res * (1.0 + OUTOFREGPERCENT)) < idisp_load || (res * (1.0 - OUTOFREGPERCENT)) > idisp_load) ) {
+    /*  if (load.onState && ((res * (1.0 + OUTOFREGPERCENT)) < idisp_load || (res * (1.0 - OUTOFREGPERCENT)) > idisp_load) ) {
         //  Serial.println(F("Regulation error detected"));
         if (++outOfReg > OUTOFREGNB) {
             outOfReg = 0;
             load.fault = true;
             Serial.println(F("Regulation can't keep up"));
         }
-    } else {
+        } else {
         outOfReg = 0;
-    }
+        }*/
     return res;
 }
 void build_menu(void) {
@@ -402,24 +396,25 @@ void build_menu(void) {
 
 void interface_printLoad(bool header) {
     if (header) {
-        Serial.println(F("Mode\tI(mA)\tV\tP(mW)\tIin(mA)\tVin\tPin(mW)\tT(°C)"));
+        Serial.println(F("Mode\tI(mA)\tV\tP(mW)\tIin(mA)\tVin\tPin(mW)\tEff(%)"));
+    } else {
+        Serial.print(loadName[loadMode]);
+        Serial.write('\t');
+        Serial.print((int)(idisp_load * 1000));
+        Serial.write('\t');
+        Serial.print(vdisp_load, 2);
+        Serial.write('\t');
+        Serial.print((int)(pdisp_load * 1000));
+        Serial.write('\t');
+        Serial.print((int)(i_meas * 1000));
+        Serial.write('\t');
+        Serial.print(v_meas, 2);
+        Serial.write('\t');
+        Serial.print((int)(p_meas * 1000));
+        Serial.write('\t');
+        Serial.print(eff, 1);
+        Serial.println(F("\t"));
     }
-    Serial.print(loadName[loadMode]);
-    Serial.write('\t');
-    Serial.print((int)(idisp_load * 1000));
-    Serial.write('\t');
-    Serial.print(vdisp_load, 2);
-    Serial.write('\t');
-    Serial.print((int)(pdisp_load * 1000));
-    Serial.write('\t');
-    Serial.print((int)(i_meas * 1000));
-    Serial.write('\t');
-    Serial.print(v_meas, 2);
-    Serial.write('\t');
-    Serial.print((int)(p_meas * 1000));
-    Serial.write('\t');
-    Serial.print(temp, 0);
-    Serial.println(F("\t"));
 }
 /*
     void interface_load() {
@@ -439,65 +434,85 @@ void interface_mode() {
     char *arg;
     arg = SCmd.next();
     if (arg != NULL) {
-        if (arg == "1") {
+        /*  if (arg == "1") {
             Serial.println(F("turning load on"));
-        } else if (arg == "0") {
+            } else if (arg == "0") {
             Serial.println(F("turning load off"));
-        } else {
+            } else {
             interface_unrecognized();
-        }
+            }*/
     }
 }
 void interface_get() {
     char *arg = SCmd.next();
     if (arg != NULL) {
-        interface_nbSteps = atoi(arg) - 1;
+        interface_nbSteps = atoi(arg);
         interface_stepsize = 0.0;
     }
     interface_printLoad(true);
 }
 
 void interface_sweep() {
-
-}
-
-
-void process_command()
-{
-    int aNumber;
-    char *arg;
-
-    Serial.println("We're in process_command");
-    arg = SCmd.next();
+    float a, b;
+    char *arg = SCmd.next();
     if (arg != NULL) {
-        aNumber = atoi(arg);  // Converts a char string to an integer
-        Serial.print("First argument was: ");
-        Serial.println(aNumber);
-    }
-    else {
-        Serial.println("No arguments");
-    }
+        a = (float)atoi(arg) / 1000.0;
+        arg = SCmd.next();
+        if (arg != NULL) {
+            b = (float)atoi(arg) / 1000.0;
+            arg = SCmd.next();
+            if (arg != NULL) {
 
-    arg = SCmd.next();
-    if (arg != NULL)
-    {
-        aNumber = atol(arg);
-        Serial.print("Second argument was: ");
-        Serial.println(aNumber);
+                interface_nbSteps = atoi(arg);
+                interface_stepsize = (float)(b - a) / ((float)interface_nbSteps);
+                interface_nbSteps++;
+                getLoadModeFromMenu();
+                switch (loadMode) {
+                    case CC:
+                        inteface_varPt = &i_setV;
+                        i_setV.change(a - iset_load);
+                        break;
+                    case CP:
+                        inteface_varPt = &p_setV;
+                        p_setV.change(a - pset_load);
+                        break;
+                    case CR:
+                        inteface_varPt = &r_setV;
+                        r_setV.change(a - rset_load);
+                        break;
+                    case BATT:
+                        Serial.println(F("Invalid Sweep mode"));
+                        return;
+                        break;
+                }
+                Serial.print(F("Starting sweep from "));
+                Serial.print(a);
+                Serial.print(" to ");
+                Serial.print(b);
+                Serial.print(" , inc ");
+                Serial.println(interface_stepsize);
+                interface_printLoad(true);
+                load.on(calc_iload());
+                return;
+            }
+        }
     }
-    else {
-        Serial.println("No second argument");
-    }
-
+    Serial.println(F("Invalid nb of args"));
 }
 
-// This gets set as the default handler, and gets called when no other command matches.
 void interface_unrecognized() {
-    Serial.println(F("Help Page"));
-    Serial.println(F("load x : Turns the load on(x=1) or off(x=0)"));
-    Serial.println(F("mode x : Set the load mode : CC=0 CP=1 CR=2 BATT=3"));
-    Serial.println(F("get [x]: returns load info, x times"));
-    Serial.println(F("sweep b e s : sweeps mode's parameter from b to e in s steps"));
+    if (interface_nbSteps) {
+        load.off();
+        interface_nbSteps = 0;
+        Serial.println(F("Emergency stop !"));
+    } else {
+        Serial.println(F("Help Page"));
+        Serial.println(F("load x : Turns the load on(x=1) or off(x=0)"));
+        Serial.println(F("mode x : Set the load mode : CC=0 CP=1 CR=2 BATT=3"));
+        Serial.println(F("get [x]: returns load info, x times"));
+        Serial.println(F("sweep b e s : sweeps mode's parameter from b to e in s steps"));
+    }
+    Serial.println(F("\r\n"));
 }
 
 void interface_poll(void) {
@@ -508,7 +523,7 @@ void interface_init(void) {
     pinMode(LEDR1_PIN, OUTPUT);
     digitalWrite(LEDR1_PIN, 0);
 
-//    SCmd.addCommand("load", interface_load);
+    //    SCmd.addCommand("load", interface_load);
     SCmd.addCommand("mode", interface_mode);
     SCmd.addCommand("get", interface_get);
     SCmd.addCommand("sweep", interface_sweep);
