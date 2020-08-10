@@ -211,9 +211,9 @@ void loop() {
 
             load.regulate(calc_iload(), temp);
 
-        } else {
+        } /*else {
             Serial.println(F("PMACQ not ready !"));
-        }
+        }*/
         if (loadMode == BATT && load.onState) { //accumulate in BATT mode
             if (vdisp_load < vcutoff_batt) { //cutoff
                 load.off();
@@ -402,7 +402,7 @@ void build_menu(void) {
 
 void interface_printLoad(bool header) {
     if (header) {
-        Serial.println(F("Mode\tI(mA)\tV\tP(mW)\tIin(mA)\tVin\tPin(mW)\tT(°C)TEST here"));
+        Serial.println(F("Mode\tI(mA)\tV\tP(mW)\tIin(mA)\tVin\tPin(mW)\tT(°C)"));
     }
     Serial.print(loadName[loadMode]);
     Serial.write('\t');
@@ -419,7 +419,7 @@ void interface_printLoad(bool header) {
     Serial.print((int)(p_meas * 1000));
     Serial.write('\t');
     Serial.print(temp, 0);
-    Serial.write('\t');
+    Serial.println(F("\t"));
 }
 /*
     void interface_load() {
