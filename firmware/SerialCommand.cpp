@@ -97,9 +97,9 @@ void SerialCommand::readSerial()
             inChar = SoftSerial->read();   // Read single available character, there may be more waiting
 #endif
         }
-#ifdef SERIALCOMMANDDEBUG
+//#ifdef SERIALCOMMANDDEBUG
         Serial.print(inChar);   // Echo back to serial stream
-#endif
+//#endif
         if (inChar == term) {   // Check for the terminator (default '\r') meaning end of command
 #ifdef SERIALCOMMANDDEBUG
             Serial.print("Received: ");

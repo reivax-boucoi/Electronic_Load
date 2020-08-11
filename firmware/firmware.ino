@@ -2,11 +2,15 @@
 #include <LiquidCrystal.h>
 #include <SimpleRotary.h>
 #include <Wire.h>
-#include "Interface.h"
+//#include "Interface.h"
 #include "Screen.h"
 #include "Menu.h"
 #include "Load.h"
 #include "PM.h"
+#include "SerialCommand.h"
+
+
+
 
 #define VERSION_NUMBER "1.3"
 
@@ -15,6 +19,7 @@
 #define ENC_A_PIN 12
 #define ENC_B_PIN 13
 #define ENC_SW_PIN 11
+#define LEDR1_PIN 9
 #define LEDB1_PIN 10
 
 #define ACQ_TIME 150.0    //time in ms
@@ -36,6 +41,8 @@ void BTN_LOAD_check(void);
 void BTN_BACK_check(void);
 float calc_iload(void);
 void build_menu(void);
+void interface_init(void);
+void interface_poll(void);
 
 //Rotary encoder : 13 12, btn 11
 SimpleRotary rotary(ENC_A_PIN, ENC_B_PIN, ENC_SW_PIN);
@@ -47,7 +54,44 @@ LiquidCrystal lcd = LiquidCrystal(8, 7, 6, 5, 4, 3);
 
 PM pm;
 Load load;
+SerialCommand SCmd;
 
+//meter values
+float i_meas = 0;
+float v_meas = 0;
+float p_meas = 0;
+
+//load input values
+float iset_load = .5;
+float pset_load = 1;
+float rset_load = 100;
+
+enum LoadMode {CP=1, CC=0, CR=2, BATT=3};
+const char*loadName[4]={"CC","CP","CR","BATT"};
+LoadMode loadMode = CC;
+
+//out of regulation error counter
+uint8_t outOfReg = 0;
+
+//load output values
+float temp = 25.0;
+float v_batt = 12.0;
+float vdisp_load = 0;
+float idisp_load = 0;
+float pdisp_load = 0;
+
+//lost power
+float p_loss = 0;
+
+float refresh_rate = .5; //acquisition time
+float fan_temp = 32.0; //fan temp
+float eff = 0;
+
+//battery values
+float iset_batt = 0.5;
+float vcutoff_batt = 3.0;
+float capAh_batt = 0.0;
+float capWh_batt = 0.0;
 
 unsigned long time1 = 0;
 unsigned long time2 = 0;
@@ -109,33 +153,33 @@ Menu mainMenu(&loadItem);
 
 
 void setup() {
-	Serial.begin(115200);
-	Wire.begin();
-	pm.init();
-	load.init();
+    Serial.begin(115200);
+    Wire.begin();
+    pm.init();
+    load.init();
     interface_init();
-    
-	pinMode(ENC_A_PIN, INPUT);
-	pinMode(ENC_B_PIN, INPUT);
-	pinMode(ENC_SW_PIN, INPUT);
-	pinMode(BTN_BACK_PIN, INPUT);
-	pinMode(BTN_LOAD_PIN, INPUT);
-	pinMode(LEDB1_PIN, OUTPUT);
-	digitalWrite(LEDB1_PIN, 0);
 
-	lcd.begin(16, 2);
-	lcd.print(F("Electronic Load"));
-	lcd.setCursor(0, 1);
-	lcd.print(F("0-100V 0-5A v"));
-	lcd.print(VERSION_NUMBER);
-	build_menu();
-	Serial.println(F("Electronic Load Started !"));
-	delay(500);
+    pinMode(ENC_A_PIN, INPUT);
+    pinMode(ENC_B_PIN, INPUT);
+    pinMode(ENC_SW_PIN, INPUT);
+    pinMode(BTN_BACK_PIN, INPUT);
+    pinMode(BTN_LOAD_PIN, INPUT);
+    pinMode(LEDB1_PIN, OUTPUT);
+    digitalWrite(LEDB1_PIN, 0);
 
-	mainMenu.show();
+    lcd.begin(16, 2);
+    lcd.print(F("Electronic Load"));
+    lcd.setCursor(0, 1);
+    lcd.print(F("0-100V 0-5A v"));
+    lcd.print(VERSION_NUMBER);
+    build_menu();
+    Serial.println(F("Electronic Load Started !"));
+    delay(500);
 
-	time1 = millis();
-	time2 = millis();
+    mainMenu.show();
+
+    time1 = millis();
+    time2 = millis();
 }
 
 
@@ -206,8 +250,8 @@ void loop() {
         mainMenu.refresh();
         digitalWrite(LEDB1_PIN, LOW);
         time2 = millis();
-        SCmd.readSerial();
     }
+    interface_poll();
 }
 
 
@@ -234,8 +278,8 @@ void BTN_LOAD_check(void) {
                     }
                 }
                 load.on(calc_iload());
-                /*Serial.print(F("Load turned on in "));
-                switch (loadMode) {
+                /*  Serial.print(F("Load turned on in "));
+                    switch (loadMode) {
                     case CC:
                         Serial.print(F("CC mode"));
                         break;
@@ -249,16 +293,14 @@ void BTN_LOAD_check(void) {
                         Serial.print(F("BATT mode : cutoff "));
                         Serial.print(vcutoff_batt);
                         break;
-                }
-                Serial.print(F(", current set to "));
-                Serial.println(calc_iload());
-				*/
+                    }
+                    Serial.print(F(", current set to "));
+                    Serial.println(calc_iload());
+                */
             }
         }
     }
 }
-
-
 void BTN_BACK_check(void) {
     if (digitalRead(BTN_BACK_PIN) != BTN_BACK_state) {
         BTN_BACK_state = !BTN_BACK_state;
@@ -267,8 +309,6 @@ void BTN_BACK_check(void) {
         }
     }
 }
-
-
 float calc_iload(void) {
     float res = 0;
     switch (loadMode) {
@@ -285,9 +325,9 @@ float calc_iload(void) {
             res = iset_batt;
             break;
     }
-    
-    if (load.onState && ((res*(1.0+OUTOFREGPERCENT))<idisp_load || (res*(1.0-OUTOFREGPERCENT))>idisp_load) ){
-      //  Serial.println(F("Regulation error detected"));
+
+    if (load.onState && ((res * (1.0 + OUTOFREGPERCENT)) < idisp_load || (res * (1.0 - OUTOFREGPERCENT)) > idisp_load) ) {
+        //  Serial.println(F("Regulation error detected"));
         if (++outOfReg > OUTOFREGNB) {
             outOfReg = 0;
             load.fault = true;
@@ -298,54 +338,157 @@ float calc_iload(void) {
     }
     return res;
 }
+void build_menu(void) {
+    meterScreen.txt1 = F("V       I      A");
+    meterScreen.txt2 = F("P      W        ");
+    CCloadScreen.txt1 = F("CC I      A T   ");
+    CCloadScreen.txt2 = F("V       P      W");
+    CPloadScreen.txt1 = F("CP P      W T   ");
+    CPloadScreen.txt2 = F("V       I      A");
+    CRloadScreen.txt1 = F("CR R      O T   ");
+    CRloadScreen.txt2 = F("V       I      A");
+    CEloadScreen.txt1 = F("Pr     W Ef    %");
+    CEloadScreen.txt2 = F("Vo       Vi     ");
+    settingsScreen.txt1 = F("Batt     V      ");
+    settingsScreen.txt2 = F("Tacq    s Fan   ");
+    battScreen.txt1 = F("I     A Vc     V");
+    battScreen.txt2 = F("     Wh      mAh");
 
+    meterItem.name = F("Meter");
+    loadItem.name = F("Load");
+    battItem.name = F("Battery");
+    settingsItem.name = F("Settings");
 
-void build_menu(void){
-	meterScreen.txt1=F("V       I      A");
-	meterScreen.txt2=F("P      W        ");
-	CCloadScreen.txt1=F("CC I      A T   ");
-	CCloadScreen.txt2=F("V       P      W");
-	CPloadScreen.txt1=F("CP P      W T   ");
-	CPloadScreen.txt2=F("V       I      A");
-	CRloadScreen.txt1=F("CR R      O T   ");
-	CRloadScreen.txt2=F("V       I      A");
-	CEloadScreen.txt1=F("Pr     W Ef    %");
-	CEloadScreen.txt2=F("Vo       Vi     ");
-	settingsScreen.txt1=F("Batt     V      ");
-	settingsScreen.txt2=F("Tacq    s Fan   ");
-	battScreen.txt1=F("I     A Vc     V");
-	battScreen.txt2=F("     Wh      mAh");
+    meterScreen.addValue(&i_measV);
+    meterScreen.addValue(&p_measV);
+    CCloadScreen.addValue(&tempV);
+    CCloadScreen.addValue(&v_loadV);
+    CCloadScreen.addValue(&p_loadV);
+    CPloadScreen.addValue(&tempV1);
+    CPloadScreen.addValue(&v_loadV1);
+    CPloadScreen.addValue(&i_loadV);
+    CRloadScreen.addValue(&tempV2);
+    CRloadScreen.addValue(&v_loadV2);
+    CRloadScreen.addValue(&i_loadV1);
+    CEloadScreen.addValue(&effV);
+    CEloadScreen.addValue(&v_load_eV);
+    CEloadScreen.addValue(&v_meas_eV);
+    settingsScreen.addValue(&refresh_rateV);
+    settingsScreen.addValue(&setting2V);
+    battScreen.addValue(&vcutoff_battV);
+    battScreen.addValue(&capWh_battV);
+    battScreen.addValue(&capAh_battV);
 
-	meterItem.name=F("Meter");
-	loadItem.name=F("Load");
-	battItem.name=F("Battery");
-	settingsItem.name=F("Settings");
-	
-	meterScreen.addValue(&i_measV);		
-	meterScreen.addValue(&p_measV);
-	CCloadScreen.addValue(&tempV);		
-	CCloadScreen.addValue(&v_loadV);		
-	CCloadScreen.addValue(&p_loadV);		
-	CPloadScreen.addValue(&tempV1);		
-	CPloadScreen.addValue(&v_loadV1);		
-	CPloadScreen.addValue(&i_loadV);		
-	CRloadScreen.addValue(&tempV2);			
-	CRloadScreen.addValue(&v_loadV2);			
-	CRloadScreen.addValue(&i_loadV1);			
-	CEloadScreen.addValue(&effV);			
-	CEloadScreen.addValue(&v_load_eV);			
-	CEloadScreen.addValue(&v_meas_eV);			
-	settingsScreen.addValue(&refresh_rateV);
-	settingsScreen.addValue(&setting2V);			
-	battScreen.addValue(&vcutoff_battV);			
-	battScreen.addValue(&capWh_battV);			
-	battScreen.addValue(&capAh_battV);		
- 
-	loadItem.addScreen(&CEloadScreen);
-	loadItem.addScreen(&CRloadScreen);
-	loadItem.addScreen(&CPloadScreen);
+    loadItem.addScreen(&CEloadScreen);
+    loadItem.addScreen(&CRloadScreen);
+    loadItem.addScreen(&CPloadScreen);
 
-    mainMenu.addMenuItem(&settingsItem);    
+    mainMenu.addMenuItem(&settingsItem);
     mainMenu.addMenuItem(&meterItem);
-	mainMenu.addMenuItem(&battItem);
+    mainMenu.addMenuItem(&battItem);
+}
+
+void interface_printLoad(bool header){
+    if(header){
+        Serial.println(F("Mode I(mA) V P(mW) Iin(mA) Vin Pin(mW) T(°C)"));
+    }
+    Serial.print
+}
+void interface_load(){
+    char *arg;
+    arg = SCmd.next();
+    if (arg != NULL){
+          if(arg=="1"){
+            Serial.println(F("turning load on"));
+          }else if(arg=="0"){
+            Serial.println(F("turning load off"));
+          }else{
+            interface_unrecognized();
+          }
+    }
+}
+void interface_mode(){
+    char *arg;
+    arg = SCmd.next();
+    if (arg != NULL){
+          if(arg=="1"){
+            Serial.println(F("turning load on"));
+          }else if(arg=="0"){
+            Serial.println(F("turning load off"));
+          }else{
+            interface_unrecognized();
+          }
+    }
+}
+void interface_get(){
+    interface_printLoad(true);
+}
+void interface_sweep(){
+    char *arg;
+    arg = SCmd.next();
+    if (arg != NULL){
+          if(arg=="1"){
+            Serial.println(F("turning load on"));
+          }else if(arg=="0"){
+            Serial.println(F("turning load off"));
+          }else{
+            interface_unrecognized();
+          }
+    }
+}
+
+
+void process_command()
+{
+    int aNumber;
+    char *arg;
+
+    Serial.println("We're in process_command");
+    arg = SCmd.next();
+    if (arg != NULL)
+    {
+        aNumber = atoi(arg);  // Converts a char string to an integer
+        Serial.print("First argument was: ");
+        Serial.println(aNumber);
+    }
+    else {
+        Serial.println("No arguments");
+    }
+
+    arg = SCmd.next();
+    if (arg != NULL)
+    {
+        aNumber = atol(arg);
+        Serial.print("Second argument was: ");
+        Serial.println(aNumber);
+    }
+    else {
+        Serial.println("No second argument");
+    }
+
+}
+
+// This gets set as the default handler, and gets called when no other command matches.
+void interface_unrecognized(){
+    Serial.println(F("Help Page"));
+    Serial.println(F("load x : Turns the load on(x=1) or off(x=0)"));
+    Serial.println(F("mode x : Set the load mode : CC=0 CP=1 CR=2 BATT=3"));
+    Serial.println(F("get : returns load info"));
+    Serial.println(F("sweep b e s : sweeps mode's parameter from b to e in s steps"));
+}
+
+void interface_poll(void) {
+
+    SCmd.readSerial();
+}
+
+void interface_init(void) {
+    pinMode(LEDR1_PIN, OUTPUT);
+    digitalWrite(LEDR1_PIN, 0);
+
+    SCmd.addCommand("load", interface_load);
+    SCmd.addCommand("mode", interface_mode);
+    SCmd.addCommand("get", interface_get);
+    SCmd.addCommand("sweep", interface_sweep);
+    SCmd.addDefaultHandler(interface_unrecognized);  // Handler for command that isn't matched  (says "What?")
 }
