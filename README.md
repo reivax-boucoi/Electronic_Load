@@ -147,7 +147,7 @@ It monitors the supply voltage and you can change the threshold temperature for 
 
 ## Improvements
 
-[x] Design a mechanical mount for the fan / stabilize the board
+- [x] Design a mechanical mount for the fan / stabilize the board
 * Re-think the menu system to be more modular / lower size
 * Add logging capability with serial interface
 * Add current sweep programming for DC-DC converters automatic characterization (with di/dv auto resolution)
