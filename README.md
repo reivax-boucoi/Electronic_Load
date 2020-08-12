@@ -54,7 +54,7 @@ On the analog part, 10mΩ  and 0.2Ω shunt resistors are used, coupled with two 
 
 
 The layout was done using the Eagle software (v9.5.2). Gerbers, Eagle project files, top and bottom views are available on the `pcb` folder. PCBs were printed using JLCPCB service.
-The schematic is available in a pdf and Eagle `.sch` format as well.
+The schematic is available in a pdf and Eagle `.sch` format as well. A Bill of Materials (BOM) is also available, in plain text and html format, on the `pcb` folder.
 
 Several user-definable bi-color status LEDs are included, such as Load ON/OFF, TX & RX, acquisition blink, as well as a power LED.
 
