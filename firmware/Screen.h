@@ -51,6 +51,7 @@ class Screen {
 	Screen* prevScreen;
 	
     bool valueEditing=false;
+    bool screenCycling=true;
     const __FlashStringHelper* txt1;
     const __FlashStringHelper* txt2;
     

@@ -2,6 +2,7 @@
 #include <LiquidCrystal.h>
 #include <SimpleRotary.h>
 #include <Wire.h>
+#include "Interface.h"
 #include "Screen.h"
 #include "Menu.h"
 #include "Load.h"
@@ -14,7 +15,6 @@
 #define ENC_A_PIN 12
 #define ENC_B_PIN 13
 #define ENC_SW_PIN 11
-#define LEDR1_PIN 9
 #define LEDB1_PIN 10
 
 #define ACQ_TIME 150.0    //time in ms
@@ -48,41 +48,6 @@ LiquidCrystal lcd = LiquidCrystal(8, 7, 6, 5, 4, 3);
 PM pm;
 Load load;
 
-//meter values
-float i_meas = 0;
-float v_meas = 0;
-float p_meas = 0;
-
-//load input values
-float iset_load = .5;
-float pset_load = 1;
-float rset_load = 100;
-
-enum LoadMode {CP, CC, CR, BATT};
-LoadMode loadMode = CC;
-
-//out of regulation error counter
-uint8_t outOfReg=0;
-
-//load output values
-float temp = 25.0;
-float v_batt = 12.0;
-float vdisp_load = 0;
-float idisp_load = 0;
-float pdisp_load = 0;
-
-//lost power
-float p_loss = 0;
-
-float refresh_rate = .5; //acquisition time
-float fan_temp = 32.0; //fan temp
-float eff = 0;
-
-//battery values
-float iset_batt = 0.5;
-float vcutoff_batt = 3.0;
-float capAh_batt = 0.0;
-float capWh_batt = 0.0;
 
 unsigned long time1 = 0;
 unsigned long time2 = 0;
@@ -148,15 +113,14 @@ void setup() {
 	Wire.begin();
 	pm.init();
 	load.init();
-
+    interface_init();
+    
 	pinMode(ENC_A_PIN, INPUT);
 	pinMode(ENC_B_PIN, INPUT);
 	pinMode(ENC_SW_PIN, INPUT);
 	pinMode(BTN_BACK_PIN, INPUT);
 	pinMode(BTN_LOAD_PIN, INPUT);
-	pinMode(LEDR1_PIN, OUTPUT);
 	pinMode(LEDB1_PIN, OUTPUT);
-	digitalWrite(LEDR1_PIN, 0);
 	digitalWrite(LEDB1_PIN, 0);
 
 	lcd.begin(16, 2);
@@ -192,7 +156,7 @@ void loop() {
 
     if (time1 + ACQ_TIME < millis()) {  //occurs @ 10Hz
 
-        digitalWrite(LEDR1_PIN, HIGH);
+        digitalWrite(LEDB1_PIN, HIGH);
         if (pm.dataReady()) {
             pm.readInputPower(&v_meas, &i_meas, &p_meas);
             pm.readOutputPower(&vdisp_load, &idisp_load, &pdisp_load);
@@ -216,7 +180,7 @@ void loop() {
             }
         }
 
-        digitalWrite(LEDR1_PIN, LOW);
+        digitalWrite(LEDB1_PIN, LOW);
         time1 = millis();
     } else if (time2 + refresh_rate * 1000 < millis()) { //occurs @ refreshRate(0.5s default)
         digitalWrite(LEDB1_PIN, HIGH);
@@ -242,6 +206,7 @@ void loop() {
         mainMenu.refresh();
         digitalWrite(LEDB1_PIN, LOW);
         time2 = millis();
+        SCmd.readSerial();
     }
 }
 
