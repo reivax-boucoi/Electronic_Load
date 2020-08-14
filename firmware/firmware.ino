@@ -66,8 +66,8 @@ float iset_load = .5;
 float pset_load = 1;
 float rset_load = 100;
 
-enum LoadMode {CP=1, CC=0, CR=2, BATT=3};
-const char*loadName[4]={"CC","CP","CR","BATT"};
+enum LoadMode {CP = 1, CC = 0, CR = 2, BATT = 3};
+const char*loadName[4] = {"CC", "CP", "CR", "BATT"};
 LoadMode loadMode = CC;
 
 //out of regulation error counter
@@ -95,6 +95,7 @@ float capWh_batt = 0.0;
 
 unsigned long time1 = 0;
 unsigned long time2 = 0;
+
 
 
 Value i_measV(&i_meas, 10, 0, 4);
@@ -151,6 +152,9 @@ MenuItem settingsItem(7, 1, &settingsScreen);
 
 Menu mainMenu(&loadItem);
 
+uint16_t interface_nbSteps = 0;
+float interface_stepsize = 0.0;
+Value *inteface_varPt = &i_setV;
 
 void setup() {
     Serial.begin(115200);
@@ -247,7 +251,15 @@ void loop() {
         p_loss = p_meas - pdisp_load;
         p_loss = max(0, p_loss);
 
+
         mainMenu.refresh();
+
+        if (interface_nbSteps) {
+            interface_printLoad(false);
+            interface_nbSteps--;
+            (*inteface_varPt).change(interface_stepsize);
+        }
+        
         digitalWrite(LEDB1_PIN, LOW);
         time2 = millis();
     }
@@ -388,68 +400,65 @@ void build_menu(void) {
     mainMenu.addMenuItem(&battItem);
 }
 
-void interface_printLoad(bool header){
-    if(header){
+void interface_printLoad(bool header) {
+    if (header) {
         Serial.println(F("Mode\tI(mA)\tV\tP(mW)\tIin(mA)\tVin\tPin(mW)\tT(°C)TEST here"));
     }
     Serial.print(loadName[loadMode]);
     Serial.write('\t');
-    Serial.print(idisp_load*1000);
+    Serial.print((int)(idisp_load * 1000));
     Serial.write('\t');
-    Serial.print(vdisp_load,2);
+    Serial.print(vdisp_load, 2);
     Serial.write('\t');
-    Serial.print(pdisp_load*1000);
+    Serial.print((int)(pdisp_load * 1000));
     Serial.write('\t');
-    Serial.print(i_meas*1000);
+    Serial.print((int)(i_meas * 1000));
     Serial.write('\t');
-    Serial.print(v_meas,2);
+    Serial.print(v_meas, 2);
     Serial.write('\t');
-    Serial.print(p_meas*1000);
+    Serial.print((int)(p_meas * 1000));
     Serial.write('\t');
-    Serial.print(temp,0);
+    Serial.print(temp, 0);
     Serial.write('\t');
 }
-void interface_load(){
+/*
+    void interface_load() {
     char *arg;
     arg = SCmd.next();
-    if (arg != NULL){
-          if(arg=="1"){
+    if (arg != NULL) {
+        if (arg == "1") {
             Serial.println(F("turning load on"));
-          }else if(arg=="0"){
+        } else if (arg == "0") {
             Serial.println(F("turning load off"));
-          }else{
+        } else {
             interface_unrecognized();
-          }
+        }
     }
-}
-void interface_mode(){
+    }*/
+void interface_mode() {
     char *arg;
     arg = SCmd.next();
-    if (arg != NULL){
-          if(arg=="1"){
+    if (arg != NULL) {
+        if (arg == "1") {
             Serial.println(F("turning load on"));
-          }else if(arg=="0"){
+        } else if (arg == "0") {
             Serial.println(F("turning load off"));
-          }else{
+        } else {
             interface_unrecognized();
-          }
+        }
     }
 }
-void interface_get(){
+void interface_get() {
+    char *arg = SCmd.next();
+    if (arg != NULL) {
+        interface_nbSteps = atoi(arg) - 1;
+        interface_stepsize = 0.0;
+    }
     interface_printLoad(true);
 }
-void interface_sweep(){
-    char *arg;
-    arg = SCmd.next();
-    if (arg != NULL){
-          if(arg=="1"){
-            Serial.println(F("turning load on"));
-          }else if(arg=="0"){
-            Serial.println(F("turning load off"));
-          }else{
-            interface_unrecognized();
-          }
-    }
+
+void interface_sweep() {
+
 }
 
 
@@ -460,8 +469,7 @@ void process_command()
 
     Serial.println("We're in process_command");
     arg = SCmd.next();
-    if (arg != NULL)
-    {
+    if (arg != NULL) {
         aNumber = atoi(arg);  // Converts a char string to an integer
         Serial.print("First argument was: ");
         Serial.println(aNumber);
@@ -484,16 +492,15 @@ void process_command()
 }
 
 // This gets set as the default handler, and gets called when no other command matches.
-void interface_unrecognized(){
+void interface_unrecognized() {
     Serial.println(F("Help Page"));
     Serial.println(F("load x : Turns the load on(x=1) or off(x=0)"));
     Serial.println(F("mode x : Set the load mode : CC=0 CP=1 CR=2 BATT=3"));
-    Serial.println(F("get : returns load info"));
+    Serial.println(F("get [x]: returns load info, x times"));
     Serial.println(F("sweep b e s : sweeps mode's parameter from b to e in s steps"));
 }
 
 void interface_poll(void) {
-
     SCmd.readSerial();
 }
 
@@ -501,9 +508,9 @@ void interface_init(void) {
     pinMode(LEDR1_PIN, OUTPUT);
     digitalWrite(LEDR1_PIN, 0);
 
-    SCmd.addCommand("load", interface_load);
+//    SCmd.addCommand("load", interface_load);
     SCmd.addCommand("mode", interface_mode);
     SCmd.addCommand("get", interface_get);
     SCmd.addCommand("sweep", interface_sweep);
-    SCmd.addDefaultHandler(interface_unrecognized);  // Handler for command that isn't matched  (says "What?")
+    SCmd.addDefaultHandler(interface_unrecognized);
 }

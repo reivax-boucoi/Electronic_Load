@@ -19,6 +19,7 @@ class Value {
 	
     void up(void);
     void down(void);
+    void change(float inc);
     void advanceCursor(void);
     void show(void);
     void refresh(void);

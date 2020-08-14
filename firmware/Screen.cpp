@@ -61,6 +61,13 @@ void Value::down(void) {
     dispVal = (*val);
 }
 
+void Value::change(float inc) {
+     (*val) +=  inc;
+    if ((*val) > maxVal)(*val) = maxVal;
+    if ((*val) < minVal)(*val) = minVal;
+    dispVal = (*val);
+}
+
 void Value::advanceCursor(void) {
     cursorPos++;
     if (cursorPos >= nbDigits)cursorPos = 0;
