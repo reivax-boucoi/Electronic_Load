@@ -53,7 +53,6 @@ void MenuItem::enter(void){
             selectedScreen->back();
         }else{
             entered=false;
-           lcd.noBlink();
         }
     }
  }
