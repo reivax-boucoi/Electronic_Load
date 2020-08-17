@@ -46,7 +46,7 @@ class Load {
     void DAC_on(void);
     void DAC_off(void);
     float setCurrent;
-    int actualDACVal;
+    uint16_t actualDACVal;
     bool fan_on=false;
 };
 
