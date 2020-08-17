@@ -2,7 +2,7 @@
 
 
 
-Value::Value(float* v, int x, int y, int digits) {
+Value::Value(float* v, uint8_t x, uint8_t y, uint8_t digits) {
   val = v;
   posX = x;
   posY = y;
@@ -12,7 +12,7 @@ Value::Value(float* v, int x, int y, int digits) {
 }
 
 
-Value::Value(float* v, int x, int y, int digits, float min, float max, void (*c)(void)) {
+Value::Value(float* v, uint8_t x, uint8_t y, uint8_t digits, float min, float max) {
   val = v;
   posX = x;
   posY = y;
@@ -24,7 +24,6 @@ Value::Value(float* v, int x, int y, int digits, float min, float max, void (*c)
   if ((*val) < minVal)dispVal = minVal;
   if ((*val) > maxVal)dispVal = maxVal;
   dispVal = *val;
-  callback = c;
 }
 
 void Value::show(void) {
@@ -53,7 +52,6 @@ void Value::up(void) {
   (*val) +=  pow(10, p);
   if ((*val) > maxVal)(*val) = maxVal;
   dispVal = (*val);
-  callback();
 }
 
 void Value::down(void) {
@@ -61,7 +59,6 @@ void Value::down(void) {
   (*val) -=  pow(10, p);
   if ((*val) < minVal)(*val) = minVal;
   dispVal = (*val);
-  callback();
 }
 
 void Value::advanceCursor(void) {
@@ -85,15 +82,20 @@ void Value::showCursor(bool editing) {
   }
 }
 
-Screen::Screen(const char* line1, const char* line2, Value * value0, Value * value1, Value * value2, Value * value3) {
-  values[3] = value3;
-  values[2] = value2;
-  values[1] = value1;
-  values[0] = value0;
-  txt1 = line1;
-  txt2 = line2;
+Screen::Screen(Value *v){
+  selectedValue = v;
+  v->nextValue=v;
+  v->prevValue=v;
 }
 
+
+void Screen::addValue(Value *v){
+	Value* b=selectedValue->nextValue;
+	selectedValue->nextValue=v;
+	v->prevValue=selectedValue;
+	v->nextValue=b;
+	b->prevValue=v;
+}
 
 void Screen::show(void) {
   lcd.clear();
@@ -101,60 +103,48 @@ void Screen::show(void) {
   lcd.print(txt1);
   lcd.setCursor(0, 1);
   lcd.print(txt2);
-  for (int i = 0; i < 4; i++) {
-    if (values[i] != NULL)values[i]->show();
-  }
-  if (selectedValue != -1) {
-    values[selectedValue]->showCursor(valueEditing);
-  } else {
-    lcd.noBlink();
-    lcd.noCursor();
-  }
+  
+  refresh();
 }
 
 void  Screen::refresh(void) {
-  for (int i = 0; i < 4; i++) {
-    if (values[i] != NULL)values[i]->refresh();
-  }
-  if (selectedValue != -1) {
-    values[selectedValue]->showCursor(valueEditing);
-  } else {
-    lcd.noBlink();
-    lcd.noCursor();
-  }
+	Value* v=selectedValue;
+	do{
+		v->refresh();
+		v=v->nextValue;
+	}while(v!=selectedValue);
+
+	selectedValue->showCursor(valueEditing);
 }
 
 void Screen::next(void) {
   if (!valueEditing) {
-    //Serial.println("Searching for next editable value");
+    //Serial.println(F("Searching for next editable value"));
     getNextValue(1);
   } else {
-    //Serial.println("Editing value : up");
-    values[selectedValue]->up();
+    //Serial.println(F("Editing value : up"));
+    selectedValue->up();
   }
   show();
 }
 void Screen::prev(void) {
   if (!valueEditing) {
-    //Serial.println("Searching for previous editable value");
-    getNextValue(-1);
+    //Serial.println(F("Searching for previous editable value"));
+    getNextValue(0);
   } else {
-    //Serial.println("Editing value : down");
-    values[selectedValue]->down();
+    //Serial.println(F("Editing value : down"));
+    selectedValue->down();
   }
   show();
 }
 
 void Screen::enter(void) {
-  if (selectedValue == -1) {//just entered the screen, select a value
-    //Serial.println("Entering screen, searching for new value");
-    getNextValue(1);
-  } else if (!valueEditing) {//go to
-    //Serial.println("Switching to value editing");
+  if (!valueEditing) {//go to
+    //Serial.println(F("Switching to value editing"));
     valueEditing = true;
   } else if (valueEditing) {
-    //Serial.println("Editing value : advancing cursor");
-    values[selectedValue]->advanceCursor();
+    //Serial.println(F("Editing value : advancing cursor"));
+    selectedValue->advanceCursor();
   }
   show();
 }
@@ -162,34 +152,18 @@ void Screen::enter(void) {
 
 void Screen::back(void) {
   if (valueEditing) {
-    //Serial.println("Screen back editing");
     valueEditing = false;
-    values[selectedValue]->cursorPos = 0;
+    selectedValue->cursorPos = 0;
     show();
-  } else {
-    //Serial.println("Screen back selecting");
-    selectedValue = -1;
   }
 }
 
-void Screen::getNextValue(int dir) {
-  int oldValue = selectedValue;
-  int i = 1;
-  int trials = 0;
-  //Serial.print("Get next value starting at ");
-  //Serial.println(selectedValue);
-  while (oldValue == selectedValue && trials < 4) {
-    int index = selectedValue + i;
-    if (index >= 4)index -= 4;
-    if (index < 0)index += 4;
-    //Serial.print("Trying ");
-    //Serial.println(index);
-    if (values[index] != NULL) {
-      if (values[index]->editable)selectedValue = index;
-    }
-    i += dir;
-    trials++;
-  }
-  //Serial.print("Get next value exiting with ");
-  //Serial.println(selectedValue);
+void Screen::getNextValue(bool dir) {
+	do{
+		if(dir){
+			selectedValue=selectedValue->nextValue;
+		}else{
+			selectedValue=selectedValue->prevValue;
+		}
+	}while(selectedValue->editable==false);
 }
