@@ -5,7 +5,7 @@
 #include <Wire.h>
 
 
-int i2c_write(byte deviceAddr,int address, long data, int l);
-long i2c_read(byte deviceAddr, int address, int l);
+uint8_t i2c_write(byte deviceAddr,uint8_t address, long data, uint8_t l);
+long i2c_read(byte deviceAddr, uint8_t address, uint8_t l);
 
 #endif
