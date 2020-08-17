@@ -6,26 +6,33 @@
 //#include <LiquidCrystal.h>
 //extern LiquidCrystal lcd;
 
+class MenuItem;
+class Menu;
 
 class MenuItem {
   public:
-    MenuItem(const char* n, int x, int y, Screen *s);
-    MenuItem(const char* n, int x, int y, Screen *s0, Screen *s1, Screen *s2, Screen *s3);
-    const char* name;
+    MenuItem(uint8_t x, uint8_t y, Screen *s);
+	void addScreen(Screen *s);
+	
+    const __FlashStringHelper* name;
     void nextScreen(void);
     void prevScreen(void);
     void back(void);
-    int selectedScreen=0;
+	
+	MenuItem* nextMenu;
+	MenuItem* prevMenu;
+	
+    Screen* selectedScreen;
     bool entered = false;
-    Screen *screens[4];
-    int sysLocX, sysLocY;
+    uint8_t sysLocX, sysLocY;
 };
 
 class Menu {
   public:
-    Menu(MenuItem* menuItem0, MenuItem* menuItem1, MenuItem* menuItem2, MenuItem* menuItem3);
-    MenuItem* menus[4];
-    int selectedMenuItem = 0;
+    Menu(MenuItem* menuItem);
+	void addMenuItem(MenuItem* menuItem);
+	
+    MenuItem* selectedMenuItem;
     bool entered = false;
     void show(void);
     void next(void);
