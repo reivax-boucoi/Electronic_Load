@@ -3,8 +3,6 @@
 
 #include "Arduino.h"
 #include "Screen.h"
-//#include <LiquidCrystal.h>
-//extern LiquidCrystal lcd;
 
 class MenuItem;
 class Menu;
@@ -18,6 +16,7 @@ class MenuItem {
     void nextScreen(void);
     void prevScreen(void);
     void back(void);
+    void enter(void);
 	
 	MenuItem* nextMenu;
 	MenuItem* prevMenu;

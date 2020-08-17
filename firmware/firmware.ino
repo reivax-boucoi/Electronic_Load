@@ -97,11 +97,16 @@ Value p_setV(&pset_load, 5, 0, 4, 0.0, POWER_MAX);
 Value r_setV(&rset_load, 5, 0, 4, RSET_MIN, RSET_MAX);
 
 Value tempV(&temp, 14, 0, 0);
+Value tempV1(&temp, 14, 0, 0);
+Value tempV2(&temp, 14, 0, 0);
 Value v_battV(&v_batt, 5, 0, 3);
 Value v_loadV(&vdisp_load, 2, 1, 4);
+Value v_loadV1(&vdisp_load, 2, 1, 4);
+Value v_loadV2(&vdisp_load, 2, 1, 4);
 
 Value p_loadV(&pdisp_load, 10, 1, 4);
 Value i_loadV(&idisp_load, 10, 1, 4);
+Value i_loadV1(&idisp_load, 10, 1, 4);
 
 //CE screen
 Value pr_loadV(&p_loss, 3, 0, 3);
@@ -220,7 +225,7 @@ void loop() {
 
         //battery supply check
         v_batt = pm.readBatt();
-        if (v_batt < 7.0) {
+        if (false && v_batt < 7.0) {
             Serial.print(F("Supply Low : "));
             Serial.print(v_batt);
             Serial.println(F("V !"));
@@ -356,26 +361,26 @@ void build_menu(void){
 	CCloadScreen.addValue(&tempV);		
 	CCloadScreen.addValue(&v_loadV);		
 	CCloadScreen.addValue(&p_loadV);		
-	CPloadScreen.addValue(&tempV);		
-	CPloadScreen.addValue(&v_loadV);		
+	CPloadScreen.addValue(&tempV1);		
+	CPloadScreen.addValue(&v_loadV1);		
 	CPloadScreen.addValue(&i_loadV);		
-	CRloadScreen.addValue(&tempV);			
-	CRloadScreen.addValue(&v_loadV);			
-	CRloadScreen.addValue(&i_loadV);			
+	CRloadScreen.addValue(&tempV2);			
+	CRloadScreen.addValue(&v_loadV2);			
+	CRloadScreen.addValue(&i_loadV1);			
 	CEloadScreen.addValue(&effV);			
 	CEloadScreen.addValue(&v_load_eV);			
 	CEloadScreen.addValue(&v_meas_eV);			
-	settingsScreen.addValue(&refresh_rateV);			
+	settingsScreen.addValue(&refresh_rateV);
 	settingsScreen.addValue(&setting2V);			
 	battScreen.addValue(&vcutoff_battV);			
 	battScreen.addValue(&capWh_battV);			
 	battScreen.addValue(&capAh_battV);		
  
-	loadItem.addScreen(&CPloadScreen);
-	loadItem.addScreen(&CRloadScreen);
 	loadItem.addScreen(&CEloadScreen);
+	loadItem.addScreen(&CRloadScreen);
+	loadItem.addScreen(&CPloadScreen);
 
+    mainMenu.addMenuItem(&settingsItem);    
+    mainMenu.addMenuItem(&meterItem);
 	mainMenu.addMenuItem(&battItem);
-	mainMenu.addMenuItem(&meterItem);
-	mainMenu.addMenuItem(&settingsItem);	
 }

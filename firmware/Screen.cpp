@@ -113,57 +113,56 @@ void  Screen::refresh(void) {
 		v->refresh();
 		v=v->nextValue;
 	}while(v!=selectedValue);
-
-	selectedValue->showCursor(valueEditing);
 }
 
 void Screen::next(void) {
   if (!valueEditing) {
-    //Serial.println(F("Searching for next editable value"));
+    Serial.println(F("Screen next : Searching for next editable value"));
     getNextValue(1);
   } else {
-    //Serial.println(F("Editing value : up"));
+    Serial.println(F("Editing value : up"));
     selectedValue->up();
   }
-  show();
 }
 void Screen::prev(void) {
   if (!valueEditing) {
-    //Serial.println(F("Searching for previous editable value"));
+    Serial.println(F("Screen prev : Searching for previous editable value"));
     getNextValue(0);
   } else {
-    //Serial.println(F("Editing value : down"));
+    Serial.println(F("Editing value : down"));
     selectedValue->down();
   }
-  show();
 }
 
 void Screen::enter(void) {
-  if (!valueEditing) {//go to
-    //Serial.println(F("Switching to value editing"));
-    valueEditing = true;
-  } else if (valueEditing) {
-    //Serial.println(F("Editing value : advancing cursor"));
-    selectedValue->advanceCursor();
-  }
-  show();
+    if(valueEditing){
+        selectedValue->advanceCursor();
+    }else{
+        valueEditing=true;
+        Serial.println(F("Screen enter"));
+        getNextValue(1);
+    }
+
 }
 
 
 void Screen::back(void) {
-  if (valueEditing) {
-    valueEditing = false;
-    selectedValue->cursorPos = 0;
-    show();
-  }
+    if(valueEditing){
+        valueEditing=false;
+    }
 }
 
 void Screen::getNextValue(bool dir) {
+    Value* v=selectedValue;
 	do{
 		if(dir){
 			selectedValue=selectedValue->nextValue;
 		}else{
 			selectedValue=selectedValue->prevValue;
 		}
-	}while(selectedValue->editable==false);
+	}while(selectedValue->editable==false && v!=selectedValue);
+    if(v==selectedValue && !selectedValue->editable){
+        valueEditing=false;
+        Serial.println(F("No editable value found !"));
+    }
 }

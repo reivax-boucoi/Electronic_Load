@@ -18,6 +18,7 @@ void MenuItem::addScreen(Screen *s){
 	b->prevScreen=s;
 }
 
+
 void MenuItem::nextScreen(void) {
   if (!entered) {
     selectedScreen=selectedScreen->nextScreen;
@@ -36,9 +37,24 @@ void MenuItem::prevScreen(void) {
   }
 }
 
+
+void MenuItem::enter(void){
+    if(entered){
+        selectedScreen->enter();
+    }else{
+        entered=true;
+        Serial.println(F("MenuItem enter"));
+    }
+}
+
  void MenuItem::back(void){
-  //Serial.println(F("MenuItem back"));
-  selectedScreen->back();
+    if(entered){
+        if(selectedScreen->valueEditing){
+            selectedScreen->back();
+        }else{
+            entered=false;
+        }
+    }
  }
 
 Menu::Menu(MenuItem* menuItem) {
@@ -74,51 +90,61 @@ void Menu::show(void) {
 	
   } else {
     selectedMenuItem->selectedScreen->show();
+    if(selectedMenuItem->entered){
+        selectedMenuItem->selectedScreen->selectedValue->showCursor(selectedMenuItem->selectedScreen->valueEditing);
+    }
   }
 }
 
 
 void Menu::refresh(void){
-  if(entered)selectedMenuItem->selectedScreen->refresh();
+  if(entered){
+    selectedMenuItem->selectedScreen->refresh();
+    if(selectedMenuItem->entered){
+        selectedMenuItem->selectedScreen->selectedValue->showCursor(selectedMenuItem->selectedScreen->valueEditing);
+    }
+  }
 }
 
 void Menu::next(void) {
   if (!entered) { //select next menu
     selectedMenuItem=selectedMenuItem->nextMenu;
-    show();
+    Serial.println(F("Menu next : nextmenuitem"));
   } else {
     selectedMenuItem->nextScreen();
   }
+    show();
 }
 
 void Menu::prev(void) {
  if (!entered) { //select next menu
+    Serial.println(F("Menu prev : prevmenuitem"));
     selectedMenuItem=selectedMenuItem->prevMenu;
-    show();
   } else {
     selectedMenuItem->prevScreen();
   }
+    show();
 }
 
 void Menu::enter(void) {
-	if (entered) {
-		selectedMenuItem->entered = true;
-		selectedMenuItem->selectedScreen->enter();
-	} else {
-		entered = true;
-		show();
-	}
+    if(entered){
+        selectedMenuItem->enter();
+    }else{
+        entered=true;
+        Serial.println(F("Menu enter"));
+    }
+    show();
 }
 
 
 
 void Menu::back(void) {
-  if (entered && selectedMenuItem->entered) {
-    if(! selectedMenuItem->selectedScreen->valueEditing)selectedMenuItem->entered = false;
-      selectedMenuItem->back();
-      show();
-  } else {
-    entered = false;
+    if(entered){
+        if(selectedMenuItem->entered==false){
+            entered=false;
+        }else{
+            selectedMenuItem->back();
+        }
+    }//no else, we're at root
     show();
-  }
 }

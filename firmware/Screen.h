@@ -54,7 +54,7 @@ class Screen {
     const __FlashStringHelper* txt1;
     const __FlashStringHelper* txt2;
     
-    private:
+    bool entered = false;
     void getNextValue(bool dir);
     Value *selectedValue;
 };
