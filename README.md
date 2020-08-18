@@ -148,12 +148,13 @@ It monitors the supply voltage and you can change the threshold temperature for 
 ## Improvements
 
 - [x] Design a mechanical mount for the fan / stabilize the board
-* Re-think the menu system to be more modular / lower size
-* Add logging capability with serial interface
-* Add current sweep programming for DC-DC converters automatic characterization (with di/dv auto resolution)
+- [x] Re-think the menu system to be more modular / lower size
+- WIP Add logging capability with serial interface
+- WIP Add current sweep programming for DC-DC converters automatic characterization (with di/dv auto resolution)
 * Fix the minimum current issue (currently min is 5mA)
 * Fix the 4 terminal Kelvin connection on the 10mΩ current sense resistors in the PCB layout
 * Design a usb isolator companion board or add SD card logging addon on i2c bus.
+* Design 4.5V->12V boost addon to allow full operation from usb power
 * Better code commenting
 * Save last used confguration on EEPROM for next power-up.
 * ...
