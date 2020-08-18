@@ -390,9 +390,24 @@ void build_menu(void) {
 
 void interface_printLoad(bool header){
     if(header){
-        Serial.println(F("Mode I(mA) V P(mW) Iin(mA) Vin Pin(mW) T(°C)"));
+        Serial.println(F("Mode\tI(mA)\tV\tP(mW)\tIin(mA)\tVin\tPin(mW)\tT(°C)"));
     }
-    Serial.print
+    Serial.print(loadName[loadMode]);
+    Serial.write('\t');
+    Serial.print(idisp_load);
+    Serial.write('\t');
+    Serial.print(vdisp_load);
+    Serial.write('\t');
+    Serial.print(pdisp_load);
+    Serial.write('\t');
+    Serial.print(i_meas);
+    Serial.write('\t');
+    Serial.print(v_meas);
+    Serial.write('\t');
+    Serial.print(p_meas);
+    Serial.write('\t');
+    Serial.print(temp);
+    Serial.write('\t');
 }
 void interface_load(){
     char *arg;
