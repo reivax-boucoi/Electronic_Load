@@ -302,11 +302,11 @@ void BTN_LOAD_check(void) {
                 getLoadModeFromMenu();
                 load.on(calc_iload());
                 
-                    Serial.print(F("Load turned on in "));
+                  /*  Serial.print(F("Load turned on in "));
                     Serial.print(loadName[loadMode]);
                     Serial.print(F(", current set to "));
                     Serial.println(calc_iload());
-                
+                */
             }
         }
     }
