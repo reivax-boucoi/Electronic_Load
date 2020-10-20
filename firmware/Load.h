@@ -6,6 +6,17 @@
 #include "Utils.h"
 
 
+#ifdef BOARD1
+
+#define DAC_CAL_COEFF 728.0//730.0 // Iout=2*Vref*DACVal/4096/.2*R1/(R1+R2), DACVal=Iout*.2*4096/2/Vref*(R1+R2)/R1
+#define DAC_OFFSET 0.00
+
+#else
+
+#define DAC_CAL_COEFF 792.0//730.0 // Iout=2*Vref*DACVal/4096/.2*R1/(R1+R2), DACVal=Iout*.2*4096/2/Vref*(R1+R2)/R1
+#define DAC_OFFSET 0.003
+
+#endif
 
 #define DAC_ADDR   0x61
 
@@ -18,9 +29,6 @@
 #define NVVREF_REG 0x18
 #define NVPD_REG   0x19
 #define NVGAIN_REG 0x20
-
-#define DAC_CAL_COEFF 730.0 // Iout=2*Vref*DACVal/4096/.2*R1/(R1+R2), DACVal=Iout*.2*4096/2/Vref*(R1+R2)/R1
-#define LOAD_REG_THRESHOLD 0.001
 
 #define LEDR2_PIN A2
 #define LEDB2_PIN A3

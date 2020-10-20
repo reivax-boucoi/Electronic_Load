@@ -28,12 +28,12 @@ void Load::regulate(float current, float temp) {
     if (onState && !fan_on && temp >= fan_temp) {   //fan temp check
         digitalWrite(FAN_PIN, HIGH);
         fan_on = true;
-        Serial.println(F("Fan on !"));
+        //Serial.println(F("Fan on !"));
     }
     if (fan_on && temp < (fan_temp - FAN_HYST)) {
         digitalWrite(FAN_PIN, LOW);
         fan_on = false;
-        Serial.println(F("Fan off !"));
+        //Serial.println(F("Fan off !"));
     }
 
     if (onState && !fault) {    //current regulation
@@ -57,8 +57,8 @@ void Load::on(float current) {
 }
 
 void Load::set(float current) {
-    setCurrent = current;
-    actualDACVal = current * DAC_CAL_COEFF;
+    setCurrent =max(current-DAC_OFFSET,0.0);
+    actualDACVal = setCurrent * DAC_CAL_COEFF;
     DAC_set();
 }
 
