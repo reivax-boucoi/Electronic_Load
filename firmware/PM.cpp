@@ -17,11 +17,11 @@ bool PM::dataReady(void) {
 
 void PM::readInputPower(float *v, float *i, float *p) {
   long pl = i2c_read(LTC2992_addr,REG_P1, 3);
-  (*p) = pl * 0.000031875;
+  (*p) = (float)pl * PM_PIN;
   long il = i2c_read(LTC2992_addr,REG_I1, 2) >> 4;
-  (*i) = il * 0.000770653514; // should be 0.00125
+  (*i) = (float)il * PM_IIN;
   long vl = i2c_read(LTC2992_addr,REG_S1, 2) >> 4;
-  (*v) = vl * 0.0255;
+  (*v) = (float)vl * PM_VIN;
   
   if(il>4094 || vl>4094)Serial.println(F("Input measurement saturated"));
 }
@@ -29,11 +29,11 @@ void PM::readInputPower(float *v, float *i, float *p) {
 void PM::readOutputPower(float *v, float *i, float *p) {
 
   long pl = i2c_read(LTC2992_addr,REG_P2, 3);
-  *p = pl * 0.000031875;
+  *p = (float)pl * PM_POUT;
   long il = i2c_read(LTC2992_addr,REG_I2, 2) >> 4;
-  *i = il * 0.001150748; // should be 0.00125;
+  *i = (float)il * PM_IOUT;
   long vl = i2c_read(LTC2992_addr,REG_S2, 2) >> 4;
-  *v = vl * 0.0255;
+  *v = (float)vl * PM_VOUT;
   
   if(il>4094 || vl>4094)Serial.println(F("Output measurement saturated"));
 }

@@ -1,6 +1,28 @@
 #ifndef PM_H
 #define PM_H
 
+#include <Arduino.h>
+#include <Wire.h>
+#include "Utils.h"
+
+#define PM_VOUT 0.0255
+#define PM_VIN  0.0255
+
+#ifdef BOARD1
+
+#define PM_PIN  0.0000252669
+#define PM_IIN  0.00099086
+#define PM_POUT 0.0000297134
+#define PM_IOUT 0.00116523
+
+#else
+
+#define PM_PIN  0.000031875
+#define PM_IIN  0.00125
+#define PM_POUT 0.000031875
+#define PM_IOUT 0.00125
+
+#endif
 
 #define LTC2992_addr 0x6F //0x66=mass response  // was 0x6F
 
@@ -53,9 +75,6 @@
 #define REG_MAX_G2_THRESHOLD 0x60
 
 
-#include <Arduino.h>
-#include <Wire.h>
-#include "Utils.h"
 
 class PM {
   public :
