@@ -1,18 +1,24 @@
 #include "Utils.h"
 
 uint8_t i2c_write(byte deviceAddr, uint8_t address, long data, uint8_t l) {
+    //Serial.println(F("i2cwrite0"));
   Wire.beginTransmission(deviceAddr);
+    //Serial.println(F("i2cwrite1"));
   Wire.write(byte(address)); // address specifier
+    //Serial.println(F("i2cwrite2"));
   while (l > 0) {
     l--;
     Wire.write(byte(data >> (l * 8))); // value specifier
   }
+    //Serial.println(F("i2cwrite3"));
   byte error = Wire.endTransmission();
+    //Serial.println(F("i2cwrite4"));
   if (error != 0) {
-    Serial.println(F("Error during write"));
+    //Serial.println(F("Error during write"));
     return 1;
   }
   delay(1);
+    //Serial.println(F("i2cwrite5"));
   return 0;
 }
 
